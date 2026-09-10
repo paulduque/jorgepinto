@@ -51,6 +51,21 @@ class SiteSettingResource extends Resource
                             ->directory('site')
                             ->disk('public')
                             ->imageEditor(),
+
+                        FileUpload::make('favicon')
+                            ->label('Favicon')
+                            ->image()
+                            ->disk('public')
+                            ->directory('settings/favicon')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '1:1',
+                            ])
+                            ->imageCropAspectRatio('1:1')
+                            ->imageResizeMode('cover')
+                            ->imageResizeTargetWidth(512)
+                            ->imageResizeTargetHeight(512)
+                            ->maxSize(10240),
                     ])
                     ->columns(2),
 

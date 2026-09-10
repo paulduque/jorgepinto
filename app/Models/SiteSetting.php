@@ -11,6 +11,7 @@ class SiteSetting extends Model
         'person_name',
         'site_description',
         'logo',
+        'favicon',
         'phone',
         'email',
         'whatsapp',

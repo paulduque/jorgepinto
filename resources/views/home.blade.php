@@ -17,9 +17,9 @@
             @endif
 
             {{-- Capas de contraste --}}
-            <div class="absolute inset-0 bg-slate-950/30"></div>
+            <div class="absolute inset-0 bg-slate-950/10"></div>
 
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent"></div>
 
             <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/10"></div>
 
@@ -335,56 +335,147 @@
 
 
     {{-- NOTICIAS --}}
-    <section class="bg-white py-24">
+    <section class="bg-white py-24 md:py-32">
         <div class="mx-auto max-w-7xl px-6">
 
-            <p class="text-sm font-bold uppercase tracking-[0.3em] text-blue-700">
-                Actualidad
-            </p>
-            <h2 class="mt-3 text-4xl font-black tracking-tight">
-                Noticias y actividades
-            </h2>
-            <div class="mt-12 grid gap-8 md:grid-cols-3">
-                @forelse ($news as $item)
-                    <article
-                        class="group overflow-hidden border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-xl">
-                        @if ($item->image)
-                            <div class="aspect-video overflow-hidden">
-                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}"
-                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
-                            </div>
-                        @endif
-                        <div class="p-7">
-                            @if ($item->category)
-                                <p class="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">
-                                    {{ $item->category }}
-                                </p>
-                            @endif
-                            <h3 class="mt-3 text-xl font-bold leading-tight">
-                                {{ $item->title }}
-                            </h3>
-                            @if ($item->excerpt)
-                                <p class="mt-4 text-sm leading-6 text-slate-600">
-                                    {{ $item->excerpt }}
-                                </p>
-                            @endif
-                            @if ($item->published_at)
-                                <p class="mt-5 text-xs text-slate-400">
-                                    {{ $item->published_at->format('d/m/Y') }}
-                                </p>
-                            @endif
-                            <a href="{{ url('/noticias/' . $item->slug) }}"
-                                class="mt-6 inline-block text-sm font-bold uppercase tracking-wide text-blue-700">
-                                Leer noticia →
-                            </a>
-                        </div>
-                    </article>
-                @empty
-                    <div class="md:col-span-3 py-12 text-center text-slate-500">
-                        No hay noticias publicadas.
-                    </div>
-                @endforelse
+            {{-- Encabezado --}}
+            <div class="flex flex-col justify-between gap-6 border-b border-slate-200 pb-8 md:flex-row md:items-end">
+                <div>
+                    <p class="text-sm font-bold uppercase tracking-[0.3em] text-blue-700">
+                        Sala de prensa
+                    </p>
+
+                    <h2 class="mt-4 text-4xl font-black tracking-[-0.03em] text-slate-950 md:text-6xl">
+                        Noticias y actividades
+                    </h2>
+                </div>
+
+                <a href="/noticias"
+                    class="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-950 transition hover:text-blue-700">
+                    Ver todas las noticias
+                    <span class="transition-transform duration-300 group-hover:translate-x-2">
+                        →
+                    </span>
+                </a>
             </div>
+
+            @if ($news->isNotEmpty())
+
+                {{-- Noticia principal --}}
+                @php
+                    $featuredNews = $news->first();
+                    $secondaryNews = $news->skip(1);
+                @endphp
+
+                <div class="mt-12 grid gap-8 lg:grid-cols-12">
+
+                    {{-- Principal --}}
+                    <article class="group lg:col-span-8">
+                        <a href="{{ url('/noticias/' . $featuredNews->slug) }}">
+
+                            @if ($featuredNews->image)
+                                <div class="aspect-[16/9] overflow-hidden bg-slate-100">
+                                    <img src="{{ asset('storage/' . $featuredNews->image) }}"
+                                        alt="{{ $featuredNews->title }}"
+                                        class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                                </div>
+                            @endif
+
+                            <div class="mt-7 max-w-3xl">
+                                <div
+                                    class="flex flex-wrap items-center gap-4 text-xs font-bold uppercase tracking-[0.2em]">
+                                    @if ($featuredNews->category)
+                                        <span class="text-blue-700">
+                                            {{ $featuredNews->category }}
+                                        </span>
+                                    @endif
+
+                                    @if ($featuredNews->published_at)
+                                        <span class="text-slate-400">
+                                            {{ $featuredNews->published_at->format('d/m/Y') }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <h3
+                                    class="mt-4 text-3xl font-black leading-tight tracking-[-0.02em] text-slate-950 transition group-hover:text-blue-700 md:text-5xl">
+                                    {{ $featuredNews->title }}
+                                </h3>
+
+                                @if ($featuredNews->excerpt)
+                                    <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
+                                        {{ $featuredNews->excerpt }}
+                                    </p>
+                                @endif
+
+                                <span
+                                    class="mt-6 inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-slate-950">
+                                    Leer noticia
+                                    <span class="transition-transform duration-300 group-hover:translate-x-2">
+                                        →
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                    </article>
+
+                    {{-- Noticias secundarias --}}
+                    @if ($secondaryNews->isNotEmpty())
+                        <div class="divide-y divide-slate-200 lg:col-span-4">
+                            @foreach ($secondaryNews as $item)
+                                <article class="group py-0 first:pt-0 lg:py-8">
+                                    <a href="{{ url('/noticias/' . $item->slug) }}">
+
+                                        @if ($item->image)
+                                            <div class="aspect-[16/9] overflow-hidden bg-slate-100">
+                                                <img src="{{ asset('storage/' . $item->image) }}"
+                                                    alt="{{ $item->title }}"
+                                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                                            </div>
+                                        @endif
+
+                                        <div class="py-6 lg:pb-0">
+                                            <div
+                                                class="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em]">
+                                                @if ($item->category)
+                                                    <span class="text-blue-700">
+                                                        {{ $item->category }}
+                                                    </span>
+                                                @endif
+
+                                                @if ($item->published_at)
+                                                    <span class="text-slate-400">
+                                                        {{ $item->published_at->format('d/m/Y') }}
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            <h3
+                                                class="mt-3 text-xl font-black leading-tight text-slate-950 transition group-hover:text-blue-700">
+                                                {{ $item->title }}
+                                            </h3>
+
+                                            <span class="mt-4 inline-flex text-sm font-bold text-slate-950">
+                                                Leer más →
+                                            </span>
+                                        </div>
+
+                                    </a>
+                                </article>
+                            @endforeach
+                        </div>
+                    @endif
+
+                </div>
+            @else
+                <div class="mt-12 border border-slate-200 px-6 py-16 text-center">
+                    <p class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">
+                        No hay noticias publicadas.
+                    </p>
+                </div>
+
+            @endif
+
         </div>
     </section>
 

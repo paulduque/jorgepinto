@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Models\SiteSetting;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,6 +28,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Jorge Pinto')
+            ->favicon(
+                fn() => SiteSetting::current()?->favicon
+                    ? asset('storage/' . SiteSetting::current()->favicon)
+                    : asset('favicon.png') // Fallback si no hay favicon
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])

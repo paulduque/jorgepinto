@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('site_description')->nullable();
 
             $table->string('logo')->nullable();
+            $table->string('favicon')->nullable();
 
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
