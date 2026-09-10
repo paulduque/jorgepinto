@@ -33,16 +33,36 @@
                 </h3>
 
                 <div class="mt-4 flex gap-4 text-sm text-slate-400">
-                    <a href="#" class="hover:text-white">Facebook</a>
-                    <a href="#" class="hover:text-white">Instagram</a>
-                    <a href="#" class="hover:text-white">YouTube</a>
+                    <a href="https://www.facebook.com/JorgePinto1979/" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-white">Facebook</a>
+                    <a href="https://x.com/JorgePintoD" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-white">X</a>
+                    <a href="https://www.tiktok.com/@jorgepintod.ec" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-white">TikTok</a>
                 </div>
             </div>
 
         </div>
 
-        <div class="mt-12 border-t border-slate-800 pt-6 text-sm text-slate-500">
-            © {{ date('Y') }} Jorge Pinto. Todos los derechos reservados.
+        <div
+            class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 text-sm text-slate-500 md:flex-row">
+
+            {{-- Copyright --}}
+            <p>
+                © {{ date('Y') }} Jorge Pinto. Todos los derechos reservados.
+            </p>
+
+            {{-- Crédito de la agencia --}}
+            <p class="flex items-center gap-1.5">
+                <span>Desarrollado con </span>
+                <span class="text-red-400"> ♥ </span>
+                <span> por </span>
+                <a href="https://webplusec.com" target="_blank" rel="noopener noreferrer"
+                    class="font-semibold text-white transition hover:text-blue-400">
+                    Web Plus Solutions
+                </a>
+            </p>
+
         </div>
 
     </div>
