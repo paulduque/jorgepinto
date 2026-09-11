@@ -146,11 +146,11 @@
                     <div
                         class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent p-6 pt-24 md:p-10 md:pt-32">
                         <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-300">
-                            {{ $news->first()?->category ?? 'Actualidad' }}
+                            {{ $news->first()?->category ?? 'Propuestas' }}
                         </p>
 
                         <h3 class="mt-3 max-w-2xl text-2xl font-black leading-tight text-white md:text-4xl">
-                            {{ $news->first()?->title ?? 'Ideas que construyen un nuevo futuro' }}
+                            {{ $news->first()?->title ?? 'Un nuevo camino para nuestro país' }}
                         </h3>
                     </div>
                 </div>
@@ -305,7 +305,7 @@
                         </div>
 
                         {{-- Imagen --}}
-                        <div class="relative hidden overflow-hidden md:col-span-4 md:block">
+                        <div class="relative overflow-hidden md:col-span-4">
                             <div class="aspect-[16/7] overflow-hidden bg-slate-800">
                                 @if ($theme->image)
                                     <img src="{{ asset('storage/' . $theme->image) }}" alt="{{ $theme->title }}"
