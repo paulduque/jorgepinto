@@ -62,11 +62,35 @@ Route::get('/buscar', function () {
 });
 
 Route::get('/noticias', function () {
+    $perPage = 3;
+
     $news = News::where('is_published', true)
         ->orderByDesc('published_at')
+        ->take($perPage)
         ->get();
 
-    return view('news.index', compact('news'));
+    $totalNews = News::where('is_published', true)->count();
+
+    return view('news.index', compact('news', 'perPage', 'totalNews'));
+});
+
+Route::get('/noticias/cargar-mas', function () {
+    $perPage = 3;
+    $offset = (int) request('offset', 0);
+
+    $news = News::where('is_published', true)
+        ->orderByDesc('published_at')
+        ->skip($offset)
+        ->take($perPage)
+        ->get();
+
+    $totalNews = News::where('is_published', true)->count();
+    $hasMore = ($offset + $news->count()) < $totalNews;
+
+    return response()->json([
+        'html' => view('news._card_list', compact('news'))->render(),
+        'hasMore' => $hasMore,
+    ]);
 });
 
 Route::get('/noticias/{slug}', function (string $slug) {
