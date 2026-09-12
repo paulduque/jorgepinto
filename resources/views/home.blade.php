@@ -38,11 +38,42 @@
                     </div>
 
                     {{-- Título --}}
-                    <h1 class="hero-reveal max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl"
-                        style="--delay: 220ms;">
-                        {{ $hero->title }}
-                    </h1>
+                    <div class="hero-reveal flex items-stretch gap-3 md:gap-5" style="--delay: 220ms;">
+                        @if ($hero->number)
+                            <span id="hero-number-{{ $hero->id }}"
+                                class="select-none shrink-0 overflow-hidden font-black"
+                                style="color: {{ $hero->number_color ?? '#60a5fa' }}; display: flex; align-items: center; justify-content: center;">
+                                {{ $hero->number }}
+                            </span>
+                        @endif
 
+                        <h1 id="hero-title-{{ $hero->id }}"
+                            class="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
+                            {{ $hero->title }}
+                        </h1>
+                    </div>
+
+                    @if ($hero->number)
+                        <script>
+                            (function() {
+                                function matchHeroNumberHeight() {
+                                    const number = document.getElementById('hero-number-{{ $hero->id }}');
+                                    const title = document.getElementById('hero-title-{{ $hero->id }}');
+                                    if (!number || !title) return;
+
+                                    const height = title.offsetHeight;
+
+                                    number.style.height = height + 'px';
+                                    number.style.lineHeight = '1';
+                                    number.style.fontSize = (height * 1.1) + 'px';
+                                    number.style.transform = 'translateY(-5%)';
+                                }
+
+                                window.addEventListener('load', matchHeroNumberHeight);
+                                window.addEventListener('resize', matchHeroNumberHeight);
+                            })();
+                        </script>
+                    @endif
                     {{-- Descripción --}}
                     @if ($hero->description)
                         <p class="hero-reveal mt-8 max-w-2xl text-base leading-7 text-slate-200 md:text-xl md:leading-8"

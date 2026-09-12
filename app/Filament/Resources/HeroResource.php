@@ -12,6 +12,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -34,6 +35,15 @@ class HeroResource extends Resource
                             ->label('Título')
                             ->required()
                             ->maxLength(255),
+
+                        TextInput::make('number')
+                            ->label('Número de lista')
+                            ->helperText('Opcional. Si lo dejas vacío, no se muestra ningún número.')
+                            ->maxLength(10),
+
+                        ColorPicker::make('number_color')
+                            ->label('Color del número')
+                            ->helperText('Opcional. Si no eliges color, se usará el azul por defecto del sitio.'),
 
                         Textarea::make('description')
                             ->label('Descripción')

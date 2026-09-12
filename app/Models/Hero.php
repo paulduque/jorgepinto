@@ -8,6 +8,8 @@ class Hero extends Model
 {
     protected $fillable = [
         'title',
+        'number',
+        'number_color',
         'description',
         'image',
         'primary_button_text',
