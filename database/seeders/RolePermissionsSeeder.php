@@ -14,7 +14,7 @@ class RolePermissionsSeeder extends Seeder
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         // ─────────────────────────────────────────────────────────
-        // COORDINADOR: todo excepto eliminar
+        // COORDINADOR: todo excepto eliminar (incluye eventos)
         // ─────────────────────────────────────────────────────────
         $coordinador = Role::findByName('coordinador');
         $coordinador->syncPermissions([
@@ -45,10 +45,16 @@ class RolePermissionsSeeder extends Seeder
             // Configuración (solo ver)
             'view_site::setting',
             'view_any_site::setting',
+            // 🆕 AGENDA: ver, crear, editar (sin eliminar)
+            'view_event',
+            'view_any_event',
+            'create_event',
+            'update_event',
+            'reorder_event',
         ]);
 
         // ─────────────────────────────────────────────────────────
-        // EDITOR: control total de contenido público
+        // EDITOR: control total de contenido público + ver eventos
         // ─────────────────────────────────────────────────────────
         $editor = Role::findByName('editor');
         $editor->syncPermissions([
@@ -84,10 +90,13 @@ class RolePermissionsSeeder extends Seeder
             'delete_theme',
             'delete_any_theme',
             'reorder_theme',
+            // 🆕 AGENDA: solo ver
+            'view_event',
+            'view_any_event',
         ]);
 
         // ─────────────────────────────────────────────────────────
-        // PUBLICISTA: solo ver contenido
+        // PUBLICISTA: solo ver contenido + ver eventos
         // ─────────────────────────────────────────────────────────
         $publicista = Role::findByName('publicista');
         $publicista->syncPermissions([
@@ -99,10 +108,13 @@ class RolePermissionsSeeder extends Seeder
             'view_any_profile',
             'view_theme',
             'view_any_theme',
+            // 🆕 AGENDA: solo ver
+            'view_event',
+            'view_any_event',
         ]);
 
         // ─────────────────────────────────────────────────────────
-        // COLABORADOR: solo ver contenido
+        // COLABORADOR: solo ver contenido + ver eventos
         // ─────────────────────────────────────────────────────────
         $colaborador = Role::findByName('colaborador');
         $colaborador->syncPermissions([
@@ -114,6 +126,9 @@ class RolePermissionsSeeder extends Seeder
             'view_any_profile',
             'view_theme',
             'view_any_theme',
+            // 🆕 AGENDA: solo ver
+            'view_event',
+            'view_any_event',
         ]);
 
         // ─────────────────────────────────────────────────────────

@@ -10,6 +10,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class SiteStatsOverview extends BaseWidget
 {
+    protected static ?int $sort = 2;
+
     protected function getStats(): array
     {
         $activeHero = Hero::where('is_active', true)->first();

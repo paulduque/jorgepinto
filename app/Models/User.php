@@ -7,9 +7,10 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;  // 👈 NUEVO
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -53,5 +54,15 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    /**
+     * Eventos asignados a este usuario.
+     */
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Event::class, 'event_user')
+            ->withPivot(['role_in_event', 'attendance_status'])
+            ->withTimestamps();
     }
 }
