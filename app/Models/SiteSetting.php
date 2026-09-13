@@ -14,6 +14,7 @@ class SiteSetting extends Model
         'default_role',
         'logo',
         'favicon',
+        'agenda_image',
         'phone',
         'email',
         'whatsapp',

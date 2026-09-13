@@ -5,6 +5,7 @@ use App\Models\News;
 use App\Models\SiteSetting;
 use App\Models\Theme;
 use App\Models\Profile;
+use App\Http\Controllers\PublicAgendaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -128,3 +129,7 @@ Route::get('/contacto', function () {
 
     return view('contact.show', compact('settings'));
 });
+
+// Agenda pública
+Route::get('/agenda', [PublicAgendaController::class, 'index'])->name('agenda.index');
+Route::get('/agenda/{event:slug}', [PublicAgendaController::class, 'show'])->name('agenda.show');

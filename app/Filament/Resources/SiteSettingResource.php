@@ -72,6 +72,21 @@ class SiteSettingResource extends Resource
                             ->imageResizeTargetWidth(512)
                             ->imageResizeTargetHeight(512)
                             ->maxSize(10240),
+
+                        FileUpload::make('agenda_image')
+                            ->label('Imagen de portada de la Agenda')
+                            ->image()
+                            ->disk('public')
+                            ->directory('site/agenda')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios(['16:9'])
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeMode('cover')
+                            ->imageResizeTargetWidth(1920)
+                            ->imageResizeTargetHeight(1080)
+                            ->maxSize(5120)
+                            ->helperText('Esta imagen se muestra en el hero de /agenda. NO reemplaza las imágenes de los eventos individuales.')
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
 

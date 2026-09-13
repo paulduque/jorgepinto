@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Event extends Model
 {
@@ -13,7 +14,9 @@ class Event extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
+        'image',
         'type',
         'start_at',
         'end_at',
@@ -41,20 +44,32 @@ class Event extends Model
     }
 
     // ─────────────────────────────────────────────────────────
+    // Eventos del modelo
+    // ─────────────────────────────────────────────────────────
+
+    protected static function booted(): void
+    {
+        static::saving(function (Event $event) {
+            if (empty($event->slug)) {
+                $event->slug = Str::slug($event->title) . '-' . uniqid();
+            }
+        });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    // ─────────────────────────────────────────────────────────
     // Relaciones
     // ─────────────────────────────────────────────────────────
 
-    /**
-     * Usuario que creó el evento.
-     */
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    /**
-     * Usuarios asignados al evento (responsables, apoyo, etc.).
-     */
     public function assignedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'event_user')
@@ -63,7 +78,7 @@ class Event extends Model
     }
 
     // ─────────────────────────────────────────────────────────
-    // Scopes (filtros reutilizables)
+    // Scopes
     // ─────────────────────────────────────────────────────────
 
     public function scopeUpcoming($query)
@@ -86,9 +101,6 @@ class Event extends Model
     // Accesores
     // ─────────────────────────────────────────────────────────
 
-    /**
-     * Etiqueta legible del tipo de evento.
-     */
     public function getTypeLabelAttribute(): string
     {
         return match ($this->type) {
@@ -102,9 +114,6 @@ class Event extends Model
         };
     }
 
-    /**
-     * Etiqueta legible del estado.
-     */
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {

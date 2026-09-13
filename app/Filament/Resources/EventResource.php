@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class EventResource extends Resource
 {
@@ -47,6 +48,23 @@ class EventResource extends Resource
                             ->label('Descripción')
                             ->rows(4)
                             ->columnSpanFull(),
+
+                        Forms\Components\FileUpload::make('image')
+                            ->label('Imagen del evento')
+                            ->image()
+                            ->disk('public')
+                            ->directory('events')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios(['16:9'])
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeMode('cover')
+                            ->imageResizeTargetWidth(1600)
+                            ->imageResizeTargetHeight(900)
+                            ->maxSize(5120)
+                            ->columnSpanFull()
+                            ->afterStateUpdated(function ($state) {
+                                Log::info('Imagen actualizada', ['state' => $state]);
+                            }),
 
                         Forms\Components\Select::make('type')
                             ->label('Tipo de evento')

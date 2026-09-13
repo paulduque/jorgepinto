@@ -8,6 +8,11 @@ use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    public static function canView(): bool
+    {
+        return request()->routeIs('filament.admin.pages.calendar');
+    }
+
     public function fetchEvents(array $fetchInfo): array
     {
         $user = Auth::user();
