@@ -19,6 +19,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\SiteSetting;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -63,6 +64,25 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
+                FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone(config('app.timezone'))
+                    ->locale('es')
+                    ->config([
+                        'headerToolbar' => [
+                            'left' => 'prev,next today',
+                            'center' => 'title',
+                            'right' => 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+                        ],
+                        'buttonText' => [
+                            'today' => 'Hoy',
+                            'month' => 'Mes',
+                            'week' => 'Semana',
+                            'day' => 'Día',
+                            'list' => 'Lista',
+                        ],
+                    ]),
             ])
             ->authMiddleware([
                 Authenticate::class,
