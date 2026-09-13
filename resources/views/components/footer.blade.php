@@ -48,7 +48,7 @@
             class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-800 pt-6 text-sm text-slate-500 md:flex-row">
 
             {{-- Copyright --}}
-            <p>
+            <p class="text-center">
                 © {{ date('Y') }} Jorge Pinto. Todos los derechos reservados.
             </p>
 
