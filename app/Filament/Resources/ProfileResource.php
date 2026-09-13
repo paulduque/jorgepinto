@@ -25,6 +25,12 @@ class ProfileResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Perfil';
+
+    protected static ?string $modelLabel = 'perfil';
+
+    protected static ?string $pluralModelLabel = 'perfiles';
+
     public static function form(Form $form): Form
     {
         return $form

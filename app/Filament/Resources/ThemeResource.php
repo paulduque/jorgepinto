@@ -24,6 +24,12 @@ class ThemeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Temas';
+
+    protected static ?string $modelLabel = 'tema';
+
+    protected static ?string $pluralModelLabel = 'temas';
+
     public static function form(Form $form): Form
     {
         return $form

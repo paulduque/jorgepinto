@@ -23,6 +23,12 @@ class SiteSettingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Configuración del Sitio';
+
+    protected static ?string $modelLabel = 'configuración';
+
+    protected static ?string $pluralModelLabel = 'configuraciones';
+
     public static function form(Form $form): Form
     {
         return $form

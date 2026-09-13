@@ -25,6 +25,12 @@ class HeroResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Portada';
+
+    protected static ?string $modelLabel = 'portada';
+
+    protected static ?string $pluralModelLabel = 'portadas';
+
     public static function form(Form $form): Form
     {
         return $form

@@ -26,6 +26,12 @@ class NewsResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Noticias';
+
+    protected static ?string $modelLabel = 'noticia';
+
+    protected static ?string $pluralModelLabel = 'noticias';
+
     public static function form(Form $form): Form
     {
         return $form
