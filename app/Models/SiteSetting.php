@@ -15,6 +15,8 @@ class SiteSetting extends Model
         'logo',
         'favicon',
         'agenda_image',
+        'agenda_link_visible',
+        'agenda_link_public_only',
         'phone',
         'email',
         'whatsapp',
@@ -31,6 +33,8 @@ class SiteSetting extends Model
     {
         return [
             'registration_enabled' => 'boolean',
+            'agenda_link_visible' => 'boolean',
+            'agenda_link_public_only' => 'boolean',
         ];
     }
 

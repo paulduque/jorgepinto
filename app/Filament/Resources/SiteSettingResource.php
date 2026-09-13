@@ -11,6 +11,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -87,6 +88,16 @@ class SiteSettingResource extends Resource
                             ->maxSize(5120)
                             ->helperText('Esta imagen se muestra en el hero de /agenda. NO reemplaza las imágenes de los eventos individuales.')
                             ->columnSpanFull(),
+
+                        Toggle::make('agenda_link_visible')
+                            ->label('Mostrar enlace "Agenda" en el menú')
+                            ->helperText('Si está desactivado, el enlace no aparecerá en el menú de navegación.')
+                            ->default(true),
+
+                        Toggle::make('agenda_link_public_only')
+                            ->label('Mostrar "Agenda" solo a usuarios autenticados')
+                            ->helperText('Si está activado, solo los usuarios con sesión iniciada verán el enlace.')
+                            ->default(false),
                     ])
                     ->columns(2),
 

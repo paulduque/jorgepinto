@@ -20,16 +20,26 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\SiteSetting;
 use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::USER_MENU_BEFORE,
+            fn(): View => view('filament.topbar.home-button'),
+        );
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile()
             ->brandName('Jorge Pinto')
             ->favicon(
                 fn() => SiteSetting::current()?->favicon
