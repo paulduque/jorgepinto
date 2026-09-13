@@ -5,129 +5,210 @@
 @section('content')
 
     {{-- HERO --}}
-    @if ($hero)
+    @if ($heroes->isNotEmpty())
         <section class="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-slate-950">
 
-            {{-- Imagen --}}
-            @if ($hero->image)
-                <div class="absolute inset-0">
-                    <img src="{{ asset('storage/' . $hero->image) }}" alt="{{ $hero->title }}"
-                        class="hero-image h-full w-full object-cover">
-                </div>
-            @endif
+            <div id="hero-carousel" class="relative min-h-[calc(100vh-5rem)]">
 
-            {{-- Capas de contraste --}}
-            <div class="absolute inset-0 bg-slate-950/10"></div>
+                @foreach ($heroes as $index => $hero)
+                    <div class="hero-slide absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'z-10 opacity-100' : 'pointer-events-none z-0 opacity-0' }}"
+                        data-index="{{ $index }}">
 
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent"></div>
-
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/10"></div>
-
-            {{-- Contenido --}}
-            <div class="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl items-end px-6 pb-16 pt-24 md:pb-24">
-
-                <div class="max-w-4xl text-white">
-
-                    {{-- Nombre --}}
-                    <div class="hero-reveal mb-6 flex items-center gap-4" style="--delay: 100ms;">
-                        <span class="h-1 w-12 bg-blue-400"></span>
-
-                        <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-300 md:text-sm">
-                            {{ $settings?->person_name ?? 'Jorge Pinto' }}
-                        </p>
-                    </div>
-
-                    {{-- Título --}}
-                    <div class="hero-reveal flex items-stretch gap-3 md:gap-5" style="--delay: 220ms;">
-                        @if ($hero->number)
-                            <span id="hero-number-{{ $hero->id }}"
-                                class="select-none shrink-0 overflow-hidden font-black"
-                                style="color: {{ $hero->number_color ?? '#60a5fa' }}; display: flex; align-items: center; justify-content: center;">
-                                {{ $hero->number }}
-                            </span>
+                        {{-- Imagen --}}
+                        @if ($hero->image)
+                            <div class="absolute inset-0">
+                                <img src="{{ asset('storage/' . $hero->image) }}" alt="{{ $hero->title }}"
+                                    class="hero-image h-full w-full object-cover">
+                            </div>
                         @endif
 
-                        <h1 id="hero-title-{{ $hero->id }}"
-                            class="max-w-4xl text-4xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
-                            {{ $hero->title }}
-                        </h1>
-                    </div>
+                        {{-- Capas de contraste --}}
+                        <div class="absolute inset-0 bg-slate-950/10"></div>
 
-                    @if ($hero->number)
-                        <script>
-                            (function() {
-                                function matchHeroNumberHeight() {
-                                    const number = document.getElementById('hero-number-{{ $hero->id }}');
-                                    const title = document.getElementById('hero-title-{{ $hero->id }}');
-                                    if (!number || !title) return;
-
-                                    const height = title.offsetHeight;
-
-                                    number.style.height = height + 'px';
-                                    number.style.lineHeight = '1';
-                                    number.style.fontSize = (height * 1.1) + 'px';
-                                    number.style.transform = 'translateY(-5%)';
-                                }
-
-                                window.addEventListener('load', matchHeroNumberHeight);
-                                window.addEventListener('resize', matchHeroNumberHeight);
-                            })();
-                        </script>
-                    @endif
-                    {{-- Descripción --}}
-                    @if ($hero->description)
-                        <p class="hero-reveal mt-8 max-w-2xl text-base leading-7 text-slate-200 md:text-xl md:leading-8"
-                            style="--delay: 340ms;">
-                            {{ $hero->description }}
-                        </p>
-                    @endif
-
-                    {{-- Botones --}}
-                    @if ($hero->primary_button_text || $hero->secondary_button_text)
-                        <div class="hero-reveal mt-9 flex flex-wrap gap-4" style="--delay: 460ms;">
-
-                            @if ($hero->primary_button_text)
-                                <a href="{{ $hero->primary_button_url ?: '#' }}"
-                                    class="group inline-flex items-center gap-3 bg-white px-7 py-4 text-sm font-bold uppercase tracking-wide text-slate-950 transition duration-300 hover:bg-blue-400 hover:text-white">
-                                    {{ $hero->primary_button_text }}
-
-                                    <span class="transition-transform duration-300 group-hover:translate-x-1">
-                                        →
-                                    </span>
-                                </a>
-                            @endif
-
-                            @if ($hero->secondary_button_text)
-                                <a href="{{ $hero->secondary_button_url ?: '#' }}"
-                                    class="group inline-flex items-center gap-3 border border-white/60 bg-white/5 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white backdrop-blur-sm transition duration-300 hover:bg-white hover:text-slate-950">
-                                    {{ $hero->secondary_button_text }}
-
-                                    <span class="transition-transform duration-300 group-hover:translate-x-1">
-                                        →
-                                    </span>
-                                </a>
-                            @endif
-
+                        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent">
                         </div>
-                    @endif
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/10">
+                        </div>
+
+                        {{-- Contenido --}}
+                        <div
+                            class="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl items-end px-6 pb-16 pt-24 md:pb-24">
+
+                            <div class="max-w-4xl text-white">
+
+                                {{-- Nombre --}}
+                                <div class="hero-reveal mb-6 flex items-center gap-4" style="--delay: 100ms;">
+                                    <span class="h-1 w-12 bg-blue-400"></span>
+
+                                    <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-300 md:text-sm">
+                                        {{ $settings?->person_name ?? 'Jorge Pinto' }}
+                                    </p>
+                                </div>
+
+                                {{-- Título --}}
+                                <div class="hero-reveal flex items-stretch gap-3 md:gap-5" style="--delay: 220ms;">
+                                    @if ($hero->number)
+                                        <span id="hero-number-{{ $hero->id }}"
+                                            class="select-none shrink-0 overflow-hidden font-black"
+                                            style="color: {{ $hero->number_color ?? '#60a5fa' }}; display: flex; align-items: center; justify-content: center;">
+                                            {{ $hero->number }}
+                                        </span>
+                                    @endif
+
+                                    <h1 id="hero-title-{{ $hero->id }}"
+                                        class="max-w-4xl text-4xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
+                                        {{ $hero->title }}
+                                    </h1>
+                                </div>
+
+                                @if ($hero->number)
+                                    <script>
+                                        (function() {
+                                            function matchHeroNumberHeight() {
+                                                const number = document.getElementById('hero-number-{{ $hero->id }}');
+                                                const title = document.getElementById('hero-title-{{ $hero->id }}');
+                                                if (!number || !title) return;
+
+                                                const height = title.offsetHeight;
+
+                                                number.style.height = height + 'px';
+                                                number.style.lineHeight = '1';
+                                                number.style.fontSize = (height * 1.1) + 'px';
+                                                number.style.transform = 'translateY(-5%)';
+                                            }
+
+                                            window.addEventListener('load', matchHeroNumberHeight);
+                                            window.addEventListener('resize', matchHeroNumberHeight);
+                                        })
+                                        ();
+                                    </script>
+                                @endif
+
+                                {{-- Descripción --}}
+                                @if ($hero->description)
+                                    <p class="hero-reveal mt-8 max-w-2xl text-base leading-7 text-slate-200 md:text-xl md:leading-8"
+                                        style="--delay: 340ms;">
+                                        {{ $hero->description }}
+                                    </p>
+                                @endif
+
+                                {{-- Botones --}}
+                                @if ($hero->primary_button_text || $hero->secondary_button_text)
+                                    <div class="hero-reveal mt-9 flex flex-wrap gap-4" style="--delay: 460ms;">
+
+                                        @if ($hero->primary_button_text)
+                                            <a href="{{ $hero->primary_button_url ?: '#' }}"
+                                                class="group inline-flex items-center gap-3 bg-white px-7 py-4 text-sm font-bold uppercase tracking-wide text-slate-950 transition duration-300 hover:bg-blue-400 hover:text-white">
+                                                {{ $hero->primary_button_text }}
+
+                                                <span class="transition-transform duration-300 group-hover:translate-x-1">
+                                                    →
+                                                </span>
+                                            </a>
+                                        @endif
+
+                                        @if ($hero->secondary_button_text)
+                                            <a href="{{ $hero->secondary_button_url ?: '#' }}"
+                                                class="group inline-flex items-center gap-3 border border-white/60 bg-white/5 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white backdrop-blur-sm transition duration-300 hover:bg-white hover:text-slate-950">
+                                                {{ $hero->secondary_button_text }}
+
+                                                <span class="transition-transform duration-300 group-hover:translate-x-1">
+                                                    →
+                                                </span>
+                                            </a>
+                                        @endif
+
+                                    </div>
+                                @endif
+
+                            </div>
+                        </div>
+
+                    </div>
+                @endforeach
+
+                {{-- Puntos de navegación --}}
+                @if ($heroes->count() > 1)
+                    <div class="absolute bottom-7 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+                        @foreach ($heroes as $index => $hero)
+                            <button type="button"
+                                class="hero-dot h-2 w-2 rounded-full transition {{ $index === 0 ? 'bg-white' : 'bg-white/40' }}"
+                                data-index="{{ $index }}" aria-label="Ir a la portada {{ $index + 1 }}">
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Indicador --}}
+                <div class="absolute bottom-7 right-6 z-20 hidden items-center gap-4 text-white/70 md:flex">
+
+                    <span class="text-[10px] font-bold uppercase tracking-[0.25em]">
+                        Explora
+                    </span>
+
+                    <span class="flex h-10 w-6 items-start justify-center rounded-full border border-white/40 p-1">
+                        <span class="h-2 w-1 rounded-full bg-white animate-bounce"></span>
+                    </span>
 
                 </div>
-            </div>
-
-            {{-- Indicador --}}
-            <div class="absolute bottom-7 right-6 hidden items-center gap-4 text-white/70 md:flex">
-
-                <span class="text-[10px] font-bold uppercase tracking-[0.25em]">
-                    Explora
-                </span>
-
-                <span class="flex h-10 w-6 items-start justify-center rounded-full border border-white/40 p-1">
-                    <span class="h-2 w-1 rounded-full bg-white animate-bounce"></span>
-                </span>
 
             </div>
 
         </section>
+
+        @if ($heroes->count() > 1)
+            <script>
+                (function() {
+                    const slides = document.querySelectorAll('#hero-carousel .hero-slide');
+                    const dots = document.querySelectorAll('#hero-carousel .hero-dot');
+                    let current = 0;
+                    let timer;
+
+                    function goTo(index) {
+                        slides[current].classList.add('opacity-0', 'z-0', 'pointer-events-none');
+                        slides[current].classList.remove('opacity-100', 'z-10');
+
+                        if (dots[current]) {
+                            dots[current].classList.remove('bg-white');
+                            dots[current].classList.add('bg-white/40');
+                        }
+
+                        current = index;
+
+                        slides[current].classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+                        slides[current].classList.add('opacity-100', 'z-10');
+
+                        if (dots[current]) {
+                            dots[current].classList.add('bg-white');
+                            dots[current].classList.remove('bg-white/40');
+                        }
+                    }
+
+                    function next() {
+                        goTo((current + 1) % slides.length);
+                    }
+
+                    function startAutoplay() {
+                        timer = setInterval(next, 6000);
+                    }
+
+                    function stopAutoplay() {
+                        clearInterval(timer);
+                    }
+
+                    dots.forEach(function(dot) {
+                        dot.addEventListener('click', function() {
+                            stopAutoplay();
+                            goTo(parseInt(dot.dataset.index, 10));
+                            startAutoplay();
+                        });
+                    });
+
+                    startAutoplay();
+                })();
+            </script>
+        @endif
     @endif
 
 

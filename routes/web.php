@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $settings = SiteSetting::current();
 
-    $hero = Hero::where('is_active', true)->first();
+    $heroes = Hero::where('is_active', true)->orderBy('id')->get();
 
     $themes = Theme::where('is_active', true)
         ->orderBy('sort_order')
@@ -25,7 +25,7 @@ Route::get('/', function () {
 
     return view('home', compact(
         'settings',
-        'hero',
+        'heroes',
         'themes',
         'news',
         'profile'
