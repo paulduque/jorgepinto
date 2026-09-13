@@ -10,6 +10,8 @@ class SiteSetting extends Model
         'site_name',
         'person_name',
         'site_description',
+        'registration_enabled',
+        'default_role',
         'logo',
         'favicon',
         'phone',
@@ -23,6 +25,13 @@ class SiteSetting extends Model
         'address',
         'contact_description',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'registration_enabled' => 'boolean',
+        ];
+    }
 
     public static function current(): ?self
     {

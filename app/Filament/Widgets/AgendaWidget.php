@@ -5,9 +5,12 @@ namespace App\Filament\Widgets;
 use App\Models\Event;
 use Carbon\Carbon;
 use Filament\Widgets\Widget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class AgendaWidget extends Widget
 {
+    use HasWidgetShield;
+
     protected static string $view = 'filament.widgets.agenda-widget';
 
     protected int|string|array $columnSpan = 'full';

@@ -7,9 +7,12 @@ use App\Models\News;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class LatestNewsWidget extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected static ?string $heading = 'Últimas noticias';
 
     protected static ?int $sort = 3;
