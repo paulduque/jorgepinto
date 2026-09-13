@@ -48,7 +48,7 @@
                         @endif
 
                         <h1 id="hero-title-{{ $hero->id }}"
-                            class="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
+                            class="max-w-4xl text-4xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
                             {{ $hero->title }}
                         </h1>
                     </div>
