@@ -27,4 +27,29 @@ class Calendar extends Page
             \App\Filament\Widgets\CalendarWidget::class,
         ];
     }
+
+    public static function canAccess(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        if (! method_exists($user, 'can')) {
+            return false;
+        }
+
+        return $user->can('page_Calendar');
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::canAccess();
+    }
+
+    public function mount(): void
+    {
+        abort_unless(static::canAccess(), 403);
+    }
 }
