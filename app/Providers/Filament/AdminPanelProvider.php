@@ -20,6 +20,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\SiteSetting;
 use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
+use App\Filament\Pages\Auth\Register;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\View\View;
@@ -34,11 +35,17 @@ class AdminPanelProvider extends PanelProvider
             fn(): View => view('filament.topbar.home-button'),
         );
 
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+            fn(): View => view('filament.auth.google-button'),
+        );
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration(Register::class)
             ->profile()
             ->brandName('Jorge Pinto')
             ->favicon(

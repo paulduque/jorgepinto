@@ -6,6 +6,7 @@ use App\Models\SiteSetting;
 use App\Models\Theme;
 use App\Models\Profile;
 use App\Http\Controllers\PublicAgendaController;
+use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -133,3 +134,7 @@ Route::get('/contacto', function () {
 // Agenda pública
 Route::get('/agenda', [PublicAgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{event:slug}', [PublicAgendaController::class, 'show'])->name('agenda.show');
+
+// Google OAuth
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
