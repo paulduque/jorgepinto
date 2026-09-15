@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class News extends Model
 {
+    use HasSlug;
+
     protected $fillable = [
         'title',
         'slug',
@@ -24,4 +28,12 @@ class News extends Model
         'is_published' => 'boolean',
         'is_featured' => 'boolean',
     ];
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
+    }
 }

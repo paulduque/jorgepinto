@@ -7,6 +7,13 @@ use App\Models\Event;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filement\Forms\Components\Select;
+use Filement\Forms\Components\DateTimePicker;
+use Filement\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -36,20 +43,31 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Información del evento')
+                Section::make('Información del evento')
                     ->schema([
-                        Forms\Components\TextInput::make('title')
+                        TextInput::make('title')
                             ->label('Título')
                             ->required()
                             ->maxLength(255)
-                            ->columnSpanFull(),
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('slug', \Illuminate\Support\Str::slug($state));
+                                }
+                            }),
 
-                        Forms\Components\Textarea::make('description')
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->helperText('Se genera automáticamente desde el título.'),
+
+                        Textarea::make('description')
                             ->label('Descripción')
                             ->rows(4)
                             ->columnSpanFull(),
 
-                        Forms\Components\FileUpload::make('image')
+                        FileUpload::make('image')
                             ->label('Imagen del evento')
                             ->image()
                             ->disk('public')

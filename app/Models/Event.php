@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Event extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
         'title',
@@ -41,24 +43,6 @@ class Event extends Model
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
         ];
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // Eventos del modelo
-    // ─────────────────────────────────────────────────────────
-
-    protected static function booted(): void
-    {
-        static::saving(function (Event $event) {
-            if (empty($event->slug)) {
-                $event->slug = Str::slug($event->title) . '-' . uniqid();
-            }
-        });
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
     }
 
     // ─────────────────────────────────────────────────────────
@@ -123,5 +107,13 @@ class Event extends Model
             'cancelado' => 'Cancelado',
             default => ucfirst($this->status),
         };
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

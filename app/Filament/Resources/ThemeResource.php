@@ -39,17 +39,23 @@ class ThemeResource extends Resource
                         TextInput::make('title')
                             ->label('Título')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('slug', \Illuminate\Support\Str::slug($state));
+                                }
+                            }),
+
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->helperText('Se genera automáticamente desde el título.'),
 
                         Textarea::make('description')
                             ->label('Descripción')
                             ->rows(4),
-
-                        TextInput::make('slug')
-                            ->label('Slug')
-                            ->required()
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true),
 
                         FileUpload::make('image')
                             ->label('Imagen')
