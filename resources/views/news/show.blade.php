@@ -27,8 +27,8 @@
         </div>
     </section>
 
-    {{-- Imagen --}}
-    @if ($news->image)
+    {{-- Imagen destacada (solo si NO hay video) --}}
+    @if (!$news->embed_url && $news->image)
         <section class="bg-white">
             <div class="mx-auto max-w-6xl px-6 py-10">
                 <div class="aspect-video overflow-hidden">
@@ -41,7 +41,7 @@
 
     {{-- Contenido --}}
     <article class="bg-white">
-        <div class="mx-auto max-w-3xl px-6 pb-20">
+        <div class="mx-auto max-w-3xl px-6 pt-16 pb-20">
 
             @if ($news->excerpt)
                 <p class="text-xl font-medium leading-8 text-slate-700">
@@ -52,6 +52,35 @@
             @if ($news->content)
                 <div class="prose prose-lg mt-10 max-w-none">
                     {!! $news->content !!}
+                </div>
+            @endif
+
+            {{-- Video embed (después del contenido) --}}
+            @if ($news->embed_url)
+                <div class="mt-12">
+                    @php
+                        $embera = new \Embera\Embera();
+                        $embedHtml = $embera->autoEmbed($news->embed_url);
+                    @endphp
+
+                    @if ($embedHtml)
+                        <div class="flex justify-center">
+                            <div class="w-full max-w-2xl">
+                                {!! $embedHtml !!}
+                            </div>
+                        </div>
+                    @else
+                        {{-- Fallback si no se pudo generar el embed --}}
+                        <div class="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center">
+                            <p class="text-sm text-slate-500">
+                                No se pudo cargar el video.
+                            </p>
+                            <a href="{{ $news->embed_url }}" target="_blank" rel="noopener noreferrer"
+                                class="mt-3 inline-block text-sm font-semibold text-blue-700 hover:text-blue-900">
+                                Ver video en la plataforma original →
+                            </a>
+                        </div>
+                    @endif
                 </div>
             @endif
 

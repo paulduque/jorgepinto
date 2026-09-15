@@ -62,6 +62,13 @@ class NewsResource extends Resource
                             ->label('Contenido')
                             ->columnSpanFull(),
 
+                        TextInput::make('embed_url')
+                            ->label('URL del video (YouTube, X, Instagram, TikTok, etc.)')
+                            ->url()
+                            ->maxLength(255)
+                            ->helperText('Pega la URL del video. Si se completa, se mostrará el embed en la noticia.')
+                            ->columnSpanFull(),
+
                         FileUpload::make('image')
                             ->label('Imagen')
                             ->image()
