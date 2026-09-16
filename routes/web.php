@@ -20,7 +20,7 @@ Route::get('/', function () {
 
     $news = News::where('is_published', true)
         ->orderByDesc('published_at')
-        ->take(3)
+        ->take(6)
         ->get();
 
     $profile = Profile::where('is_active', true)->first();

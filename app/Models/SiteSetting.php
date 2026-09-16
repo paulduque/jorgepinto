@@ -9,6 +9,7 @@ class SiteSetting extends Model
     protected $fillable = [
         'site_name',
         'person_name',
+        'list_number',
         'site_description',
         'registration_enabled',
         'default_role',

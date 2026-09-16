@@ -47,6 +47,12 @@ class SiteSettingResource extends Resource
                             ->required()
                             ->maxLength(255),
 
+                        TextInput::make('list_number')
+                            ->label('Número de lista')
+                            ->maxLength(50)
+                            ->helperText('Ej: "Lista 3" o "Lista 3 - Pichincha". Aparecerá en las secciones del home.')
+                            ->columnSpanFull(),
+
                         Textarea::make('site_description')
                             ->label('Descripción')
                             ->rows(4)

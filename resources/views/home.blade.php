@@ -238,59 +238,128 @@
             </div>
 
             {{-- Bloque editorial --}}
-            <div class="mt-16 grid gap-6 md:grid-cols-12">
+            @if ($news->isNotEmpty())
+                <div class="mt-16 grid gap-6 md:grid-cols-12">
 
-                {{-- Imagen principal --}}
-                <div class="group relative overflow-hidden bg-slate-100 md:col-span-8">
-                    <div class="aspect-[16/10] overflow-hidden">
-                        @if ($news->first()?->image)
-                            <img src="{{ asset('storage/' . $news->first()->image) }}" alt="{{ $news->first()->title }}"
-                                class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
-                        @else
-                            <div class="flex h-full items-center justify-center bg-slate-200">
-                                <span class="text-sm font-bold uppercase tracking-widest text-slate-500">
-                                    Imagen principal
-                                </span>
+                    @php
+                        $featuredMoment = $news->first();
+                        $secondaryMoment = $news->skip(1)->first();
+                    @endphp
+
+                    {{-- Noticia principal --}}
+                    <article class="group relative overflow-hidden bg-slate-100 md:col-span-8">
+                        <a href="{{ url('/noticias/' . $featuredMoment->slug) }}" class="block h-full">
+                            <div class="aspect-[16/10] overflow-hidden">
+                                @if ($featuredMoment->image)
+                                    <img src="{{ asset('storage/' . $featuredMoment->image) }}"
+                                        alt="{{ $featuredMoment->title }}"
+                                        class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                                @else
+                                    <div class="flex h-full items-center justify-center bg-slate-200">
+                                        <span class="text-sm font-bold uppercase tracking-widest text-slate-500">
+                                            Sin imagen
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
 
-                    <div
-                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent p-6 pt-24 md:p-10 md:pt-32">
-                        <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-300">
-                            {{ $news->first()?->category ?? 'Propuestas' }}
-                        </p>
+                            <div
+                                class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent p-6 pt-24 md:p-10 md:pt-32">
+                                @if ($featuredMoment->category)
+                                    <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-300">
+                                        {{ $featuredMoment->category }}
+                                    </p>
+                                @endif
 
-                        <h3 class="mt-3 max-w-2xl text-2xl font-black leading-tight text-white md:text-4xl">
-                            {{ $news->first()?->title ?? 'Un nuevo camino para nuestro país' }}
-                        </h3>
-                    </div>
+                                <h3 class="mt-3 max-w-2xl text-2xl font-black leading-tight text-white md:text-4xl">
+                                    {{ $featuredMoment->title }}
+                                </h3>
+                            </div>
+                        </a>
+                    </article>
+
+                    {{-- Noticia secundaria (lateral) --}}
+                    @if ($secondaryMoment)
+                        <article class="flex flex-col justify-between bg-slate-950 p-8 text-white md:col-span-4 md:p-10">
+                            <div>
+                                {{-- Leyenda Lista 3 --}}
+                                @if ($settings?->list_number)
+                                    <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-400">
+                                        {{ $settings->list_number }}
+                                    </p>
+                                    <div class="mt-4 h-px w-12 bg-blue-400"></div>
+                                @endif
+
+                                <h3 class="mt-6 text-2xl font-bold leading-tight md:text-3xl">
+                                    {{ $secondaryMoment->title }}
+                                </h3>
+
+                                @if ($secondaryMoment->excerpt)
+                                    <p class="mt-6 text-sm leading-7 text-slate-300">
+                                        {{ Str::limit($secondaryMoment->excerpt, 150) }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <a href="{{ url('/noticias/' . $secondaryMoment->slug) }}"
+                                class="group mt-10 inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-white">
+                                Leer noticia
+                                <span class="transition-transform duration-300 group-hover:translate-x-2">
+                                    →
+                                </span>
+                            </a>
+                        </article>
+                    @else
+                        {{-- Fallback: si solo hay 1 noticia --}}
+                        <div class="flex flex-col justify-between bg-slate-950 p-8 text-white md:col-span-4 md:p-10">
+                            <div>
+                                @if ($settings?->list_number)
+                                    <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-400">
+                                        {{ $settings->list_number }}
+                                    </p>
+                                    <div class="mt-4 h-px w-12 bg-blue-400"></div>
+                                @endif
+
+                                <h3 class="mt-6 text-2xl font-bold leading-tight md:text-3xl">
+                                    Propuestas que buscan transformar nuestro país.
+                                </h3>
+
+                                <p class="mt-6 text-sm leading-7 text-slate-300">
+                                    Un espacio para conocer las principales ideas, iniciativas
+                                    y temas que forman parte de esta visión.
+                                </p>
+                            </div>
+
+                            <a href="/temas"
+                                class="group mt-10 inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-white">
+                                Explorar temas
+                                <span class="transition-transform duration-300 group-hover:translate-x-2">
+                                    →
+                                </span>
+                            </a>
+                        </div>
+                    @endif
+
                 </div>
 
-                {{-- Texto lateral --}}
-                <div class="flex flex-col justify-between bg-slate-950 p-8 text-white md:col-span-4 md:p-10">
-                    <div>
-                        <span class="text-5xl font-black text-blue-400">01</span>
-
-                        <h3 class="mt-8 text-2xl font-bold leading-tight md:text-3xl">
-                            Propuestas que buscan transformar nuestro país.
-                        </h3>
-
-                        <p class="mt-6 text-sm leading-7 text-slate-300">
-                            Un espacio para conocer las principales ideas, iniciativas
-                            y temas que forman parte de esta visión.
-                        </p>
-                    </div>
-
-                    <a href="/temas"
-                        class="group mt-10 inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-white">
-                        Explorar temas
+                {{-- Enlace ver todas las noticias --}}
+                <div class="mt-12 text-center">
+                    <a href="/noticias"
+                        class="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-blue-700 transition hover:text-blue-900">
+                        Ver todas las noticias
                         <span class="transition-transform duration-300 group-hover:translate-x-2">
                             →
                         </span>
                     </a>
                 </div>
-            </div>
+            @else
+                {{-- Sin noticias --}}
+                <div class="mt-16 border border-slate-200 px-6 py-16 text-center">
+                    <p class="text-sm font-bold uppercase tracking-[0.2em] text-slate-400">
+                        No hay noticias publicadas.
+                    </p>
+                </div>
+            @endif
 
         </div>
     </section>
@@ -316,9 +385,14 @@
                         @endif
                     </div>
                     {{-- Número editorial --}}
-                    <div class="absolute -bottom-6 -right-2 hidden bg-blue-700 px-7 py-5 text-white md:block">
-                        <span class="text-4xl font-black">02</span>
-                    </div>
+                    {{-- 👈 LEYENDA LISTA 3 (dinámica) --}}
+                    @if ($settings?->list_number)
+                        <div class="absolute -bottom-6 -right-2 hidden bg-blue-700 px-7 py-5 text-white md:block">
+                            <span class="text-2xl font-black uppercase tracking-wider">
+                                {{ $settings->list_number }}
+                            </span>
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Contenido --}}
@@ -367,11 +441,20 @@
             {{-- Encabezado --}}
             <div class="grid gap-8 md:grid-cols-12 md:items-end">
                 <div class="md:col-span-8">
-                    <p class="text-sm font-bold uppercase tracking-[0.3em] text-blue-400">
-                        Prioridades
-                    </p>
+                    <div class="flex items-center gap-4">
+                        <p class="text-sm font-bold uppercase tracking-[0.3em] text-blue-400">
+                            Prioridades
+                        </p>
 
-                    <h2 class="mt-5 max-w-4xl text-4xl font-black leading-[1.05] tracking-[-0.03em] text-white md:text-6xl">
+                        @if ($settings?->list_number)
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                                · {{ $settings->list_number }}
+                            </span>
+                        @endif
+                    </div>
+
+                    <h2
+                        class="mt-5 max-w-4xl text-4xl font-black leading-[1.05] tracking-[-0.03em] text-white md:text-6xl">
                         Los temas que
                         <span class="text-slate-500">importan.</span>
                     </h2>
@@ -473,10 +556,11 @@
 
             @if ($news->isNotEmpty())
 
-                {{-- Noticia principal --}}
+                {{-- Siguiente Noticia principal --}}
                 @php
-                    $featuredNews = $news->first();
-                    $secondaryNews = $news->skip(1);
+                    // Sala de prensa empieza desde la 2ª noticia (la 1ª ya está en Los momentos)
+                    $featuredNews = $news->skip(1)->first() ?? $news->first();
+                    $secondaryNews = $news->skip(2)->take(2); // Tomar las siguientes 2 noticias
                 @endphp
 
                 <div class="mt-12 grid gap-8 lg:grid-cols-12">
