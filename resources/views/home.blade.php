@@ -342,14 +342,18 @@
 
                 </div>
 
-                {{-- Enlace ver todas las noticias --}}
-                <div class="mt-12 text-center">
+                {{-- Enlaces de acción --}}
+                <div class="mt-12 flex flex-wrap items-center justify-center gap-4">
                     <a href="/noticias"
-                        class="group inline-flex items-center gap-3 text-sm font-bold uppercase tracking-wider text-blue-700 transition hover:text-blue-900">
+                        class="group inline-flex items-center gap-3 bg-slate-950 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white transition duration-300 hover:bg-blue-700">
                         Ver todas las noticias
-                        <span class="transition-transform duration-300 group-hover:translate-x-2">
-                            →
-                        </span>
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </a>
+
+                    <a href="/temas"
+                        class="group inline-flex items-center gap-3 border border-slate-950 px-7 py-4 text-sm font-bold uppercase tracking-wide text-slate-950 transition duration-300 hover:bg-slate-950 hover:text-white">
+                        Explorar temas
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
                     </a>
                 </div>
             @else
