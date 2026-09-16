@@ -64,11 +64,24 @@
                     @endphp
 
                     @if ($embedHtml)
-                        <div class="flex justify-center">
-                            <div class="w-full max-w-2xl">
-                                {!! $embedHtml !!}
-                            </div>
-                        </div>
+                        @php
+                            // Detectar si es YouTube, Vimeo u otro video que use iframe
+                            $isVideoIframe = preg_match('/<iframe/', $embedHtml);
+                        @endphp
+
+                        @if ($isVideoIframe) {{-- Video (YouTube, Vimeo, etc.): contenedor responsive 16:9 --}}
+                <div class="mx-auto w-full max-w-3xl">
+                    <div class="relative aspect-video w-full overflow-hidden rounded-lg shadow-lg [&>iframe]:absolute [&>iframe]:inset-0 [&>iframe]:h-full [&>iframe]:w-full">
+                        {!! $embedHtml !!}
+                    </div>
+                </div>
+            @else
+                {{-- Embed tipo X (blockquote): centrar sin forzar aspect ratio --}}
+                <div class="flex justify-center">
+                    <div class="w-full max-w-2xl">
+                        {!! $embedHtml !!}
+                    </div>
+                </div> @endif
                     @else
                         {{-- Fallback si no se pudo generar el embed --}}
                         <div class="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center">
