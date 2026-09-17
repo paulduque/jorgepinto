@@ -96,9 +96,7 @@
                     <div class="space-y-3">
                         @foreach ($selectedEvents as $event)
                             @php
-                                $url = $canEdit
-                                    ? \App\Filament\Resources\EventResource::getUrl('edit', ['record' => $event])
-                                    : null;
+                                $url = \App\Filament\Resources\EventResource::getUrl('view', ['record' => $event]);
                             @endphp
 
                             @if ($url)

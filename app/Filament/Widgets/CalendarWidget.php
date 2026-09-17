@@ -3,7 +3,9 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Event;
-use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\EventResource;
+use Filament\Facades\Filament;
+use App\Models\User;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
@@ -21,14 +23,14 @@ class CalendarWidget extends FullCalendarWidget
         }
 
         // 2. Verificar el rol del usuario
-        $user = \Filament\Facades\Filament::auth()->user();
+        $user = Filament::auth()->user();
 
         if (! $user) {
             return false;
         }
 
         // Recargar el modelo desde la BD para asegurar que tiene HasRoles
-        $user = \App\Models\User::find($user->id);
+        $user = User::find($user->id);
 
         if (! $user) {
             return false;
@@ -39,26 +41,17 @@ class CalendarWidget extends FullCalendarWidget
 
     public function fetchEvents(array $fetchInfo): array
     {
-        $user = Auth::user();
-        $canEdit = false;
-
-        if ($user instanceof \App\Models\User) {
-            $canEdit = $user->can('update_event');
-        }
-
         return Event::query()
             ->where('start_at', '>=', $fetchInfo['start'])
             ->where('start_at', '<=', $fetchInfo['end'])
             ->get()
-            ->map(function (Event $event) use ($canEdit) {
+            ->map(function (Event $event) {
                 return [
                     'id' => $event->id,
                     'title' => $event->title,
                     'start' => $event->start_at->toIso8601String(),
                     'end' => $event->end_at?->toIso8601String(),
-                    'url' => $canEdit
-                        ? \App\Filament\Resources\EventResource::getUrl('edit', ['record' => $event])
-                        : null,
+                    'url' => EventResource::getUrl('view', ['record' => $event]),
                     'backgroundColor' => match ($event->type) {
                         'mitin' => '#dc2626',
                         'reunion' => '#2563eb',

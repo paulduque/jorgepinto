@@ -5,7 +5,6 @@ namespace App\Filament\Widgets;
 use App\Models\Event;
 use Carbon\Carbon;
 use Filament\Widgets\Widget;
-use Illuminate\Support\Facades\Auth;
 
 class AgendaWidget extends Widget
 {
@@ -88,12 +87,6 @@ class AgendaWidget extends Widget
      */
     protected function getViewData(): array
     {
-        $user = Auth::user();
-        $canEdit = false;
-        if ($user instanceof \App\Models\User) {
-            $canEdit = $user->can('update_event');
-        }
-
         // Rango del mes actual
         $currentDate = Carbon::create($this->currentYear, $this->currentMonth, 1);
         $startOfMonth = $currentDate->copy()->startOfMonth();
@@ -126,7 +119,6 @@ class AgendaWidget extends Widget
             'selectedEvents' => $selectedEvents,
             'selectedDateLabel' => Carbon::parse($this->selectedDate)->translatedFormat('l, d \d\e F \d\e Y'),
             'totalSelected' => $selectedEvents->count(),
-            'canEdit' => $canEdit,
         ];
     }
 }
