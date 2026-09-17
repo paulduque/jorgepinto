@@ -44,63 +44,65 @@
 }
 
 /* ============================================
-   FullCalendar - Responsive Mejorado
+        FullCalendar - Eventos: hora arriba, título abajo
    ============================================ */
 
-/* ---- Base: eventos en vista de mes ---- */
+/* Base: eventos apilados (hora arriba, título abajo) */
 .fc .fc-daygrid-event {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
     padding: 2px 4px !important;
     margin-top: 2px !important;
     border-radius: 4px !important;
     border-left-width: 3px !important;
     overflow: hidden !important;
-    line-height: 1.3 !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+    font-size: 0.7rem !important;
 }
 
-/* Contenedor del título del evento */
+/* La hora arriba, más pequeña y en negrita */
+.fc .fc-daygrid-event .fc-event-time {
+    display: block !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    margin: 0 0 1px 0 !important;
+    padding: 0 !important;
+    opacity: 0.95 !important;
+    order: 1 !important;
+}
+
+/* El título abajo, ocupando el resto del espacio */
 .fc .fc-daygrid-event .fc-event-title {
     display: block !important;
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    line-height: 1.15 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
-    font-size: 0.75rem !important;
-    font-weight: 600 !important;
+    max-width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
-    line-height: 1.2 !important;
+    order: 2 !important;
 }
 
-/* Hora del evento */
-.fc .fc-daygrid-event .fc-event-time {
-    display: inline-block !important;
-    font-size: 0.7rem !important;
-    font-weight: 700 !important;
-    margin-right: 4px !important;
-    opacity: 0.9 !important;
-    padding: 0 !important;
-    line-height: 1.2 !important;
-}
-
-/* Ocultar el punto del evento (fc-daygrid-event-dot) */
+/* Ocultar el punto */
 .fc .fc-daygrid-event-dot {
     display: none !important;
 }
 
-/* Contenedor de la fila del evento */
+/* Contenedor del evento */
 .fc .fc-daygrid-event-harness {
     margin-top: 2px !important;
     margin-bottom: 0 !important;
 }
 
 /* ============================================
-   MÓVIL (< 768px)
+    MÓVIL (< 768px): apilado compacto
    ============================================ */
 @media (max-width: 767px) {
-    /* Toolbar apilada */
     .fc .fc-toolbar {
         flex-direction: column !important;
         gap: 0.5rem !important;
@@ -123,36 +125,21 @@
     .fc .fc-button {
         padding: 0.25rem 0.5rem !important;
         font-size: 0.7rem !important;
-        line-height: 1.2 !important;
     }
 
-    .fc .fc-button-group {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-    }
-
-    /* ---- Eventos: SOLO TÍTULO en móvil ---- */
+    /* Eventos más compactos */
     .fc .fc-daygrid-event {
-        padding: 1px 4px !important;
+        padding: 1px 3px !important;
         margin-top: 1px !important;
-        font-size: 0.65rem !important;
-        border-radius: 3px !important;
     }
 
-    /* Ocultar la hora completamente */
     .fc .fc-daygrid-event .fc-event-time {
-        display: none !important;
+        font-size: 0.55rem !important;
+        margin-bottom: 0 !important;
     }
 
-    /* El título ocupa todo el ancho */
     .fc .fc-daygrid-event .fc-event-title {
         font-size: 0.65rem !important;
-        font-weight: 500 !important;
-        display: block !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-        max-width: 100% !important;
     }
 
     /* Días más compactos */
@@ -166,12 +153,10 @@
         padding: 4px 1px !important;
     }
 
-    /* Altura mínima de celdas */
     .fc .fc-daygrid-day-frame {
         min-height: 55px !important;
     }
 
-    /* Enlace "+ más" */
     .fc .fc-daygrid-more-link {
         font-size: 0.6rem !important;
         font-weight: 700 !important;
@@ -180,7 +165,7 @@
 }
 
 /* ============================================
-   TABLET (768px - 1023px)
+        TABLET (768px - 1023px)
    ============================================ */
 @media (min-width: 768px) and (max-width: 1023px) {
     .fc .fc-toolbar-title {
@@ -194,7 +179,7 @@
 }
 
 /* ============================================
-   DESKTOP (>= 1024px)
+        DESKTOP (>= 1024px)
    ============================================ */
 @media (min-width: 1024px) {
     .fc .fc-daygrid-event .fc-event-time {
@@ -207,7 +192,7 @@
 }
 
 /* ============================================
-   MODO OSCURO
+    MODO OSCURO
    ============================================ */
 .dark .fc {
     --fc-border-color: #374151;
