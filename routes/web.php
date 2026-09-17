@@ -25,7 +25,6 @@ Route::get('/', function () {
     $profile = Profile::where('is_active', true)->first();
 
     return view('home', compact(
-        'settings',
         'heroes',
         'themes',
         'news',
@@ -126,7 +125,7 @@ Route::get('/perfil', function () {
 
 Route::get('/contacto', function () {
 
-    return view('contact.show', compact('settings'));
+    return view('contact.show');
 });
 
 // Agenda pública
