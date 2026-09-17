@@ -16,4 +16,12 @@ class EditEvent extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    /**
+     * Redirigir al listado de eventos después de guardar cambios.
+     */
+    protected function getRedirectUrl(): string
+    {
+        return static::getResource()::getUrl('index');
+    }
 }

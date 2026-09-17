@@ -4,13 +4,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="text-lg">📅</span>
-                    <span>Agenda de hoy</span>
-                    @if ($totalToday > 0)
-                        <span
-                            class="ml-2 rounded-full bg-primary-100 px-2 py-0.5 text-xs font-semibold text-primary-700 dark:bg-primary-900 dark:text-primary-300">
-                            {{ $totalToday }} {{ $totalToday === 1 ? 'evento' : 'eventos' }}
-                        </span>
-                    @endif
+                    <span>Agenda del mes</span>
                 </div>
 
                 <a href="{{ \App\Filament\Resources\EventResource::getUrl('index') }}"
@@ -21,15 +15,29 @@
         </x-slot>
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
             {{-- Mini calendario (izquierda) --}}
             <div class="md:col-span-1">
                 <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                    <div class="mb-3 text-center">
+
+                    {{-- Navegación de mes --}}
+                    <div class="mb-3 flex items-center justify-between">
+                        <button type="button" wire:click="previousMonth"
+                            class="flex h-7 w-7 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-700">
+                            ←
+                        </button>
+
                         <p class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                            {{ $today->translatedFormat('F Y') }}
+                            {{ $currentMonthLabel }}
                         </p>
+
+                        <button type="button" wire:click="nextMonth"
+                            class="flex h-7 w-7 items-center justify-center rounded-lg text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-700">
+                            →
+                        </button>
                     </div>
 
+                    {{-- Días de la semana --}}
                     <div
                         class="mb-2 grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase text-gray-400">
                         <span>L</span>
@@ -41,31 +49,32 @@
                         <span>D</span>
                     </div>
 
-                    @php
-                        $startOfMonth = $today->copy()->startOfMonth();
-                        $endOfMonth = $today->copy()->endOfMonth();
-                        $startDayOfWeek = $startOfMonth->dayOfWeekIso;
-                        $daysInMonth = $endOfMonth->day;
-                        $todayDay = $today->day;
-                    @endphp
-
+                    {{-- Días del mes --}}
                     <div class="grid grid-cols-7 gap-1 text-center text-xs">
                         @for ($i = 1; $i < $startDayOfWeek; $i++)
                             <span></span>
                         @endfor
 
                         @for ($day = 1; $day <= $daysInMonth; $day++)
-                            @if ($day === $todayDay)
-                                <span
-                                    class="flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 font-bold text-white">
-                                    {{ $day }}
-                                </span>
-                            @else
-                                <span
-                                    class="flex h-7 w-7 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                                    {{ $day }}
-                                </span>
-                            @endif
+                            @php
+                                $date = \Carbon\Carbon::create($currentYear, $currentMonth, $day)->format('Y-m-d');
+                                $isSelected = $date === $selectedDate;
+                                $hasEvents = $eventsByDay->has($date) && $eventsByDay->get($date)->count() > 0;
+                            @endphp
+
+                            <button type="button" wire:click="selectDay({{ $day }})"
+                                wire:key="day-{{ $currentYear }}-{{ $currentMonth }}-{{ $day }}"
+                                class="relative flex h-7 w-7 items-center justify-center rounded-full transition
+                                    @if ($isSelected) bg-primary-600 font-bold text-white
+                                    @elseif ($hasEvents)
+                                        bg-primary-100 font-semibold text-primary-700 hover:bg-primary-200 dark:bg-primary-900/40 dark:text-primary-300
+                                    @else
+                                        text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 @endif">
+                                {{ $day }}
+                                @if ($hasEvents && !$isSelected)
+                                    <span class="absolute bottom-0.5 h-1 w-1 rounded-full bg-primary-600"></span>
+                                @endif
+                            </button>
                         @endfor
                     </div>
                 </div>
@@ -73,12 +82,20 @@
 
             {{-- Lista de eventos (derecha) --}}
             <div class="md:col-span-2">
-                @if ($todayEvents->isNotEmpty())
-                    {{-- ─── Eventos de hoy ─── --}}
+                <div class="mb-3 flex items-center gap-2">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        {{ $selectedDateLabel }}
+                    </span>
+                    <span class="h-px flex-1 bg-gray-200 dark:bg-gray-700"></span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ $totalSelected }} {{ $totalSelected === 1 ? 'evento' : 'eventos' }}
+                    </span>
+                </div>
+
+                @if ($selectedEvents->isNotEmpty())
                     <div class="space-y-3">
-                        @foreach ($todayEvents as $event)
+                        @foreach ($selectedEvents as $event)
                             @php
-                                $canEdit = auth()->user()?->can('update_event') ?? false;
                                 $url = $canEdit
                                     ? \App\Filament\Resources\EventResource::getUrl('edit', ['record' => $event])
                                     : null;
@@ -88,9 +105,8 @@
                                 <a href="{{ $url }}"
                                     class="group block rounded-lg border border-gray-200 bg-white p-4 transition hover:border-primary-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600">
                                 @else
-                                    <div x-data="{ showTooltip: false }"
-                                        @click="showTooltip = true; setTimeout(() => showTooltip = false, 2500)"
-                                        class="group relative block cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                                    <div
+                                        class="group relative block rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
                             @endif
 
                             <div class="flex items-start gap-4">
@@ -151,19 +167,6 @@
                                 </div>
                             </div>
 
-                            @if (!$url)
-                                <div x-show="showTooltip" x-transition:enter="transition ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 translate-y-1"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    x-transition:leave="transition ease-in duration-150"
-                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                    class="absolute -top-2 left-1/2 z-50 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-gray-900 px-3 py-2 text-xs font-medium text-white shadow-lg">
-                                    🔒 Este evento es solo de lectura para tu rol
-                                    <span
-                                        class="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-900"></span>
-                                </div>
-                            @endif
-
                             @if ($url)
                                 </a>
                             @else
@@ -171,93 +174,22 @@
                 @endif
                 @endforeach
             </div>
-        @elseif ($upcomingEvents->isNotEmpty())
-            {{-- ─── Próximos eventos ─── --}}
-            <div class="mb-3 flex items-center gap-2">
-                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Próximos eventos
-                </span>
-                <span class="h-px flex-1 bg-gray-200 dark:bg-gray-700"></span>
-            </div>
-
-            <div class="space-y-3">
-                @foreach ($upcomingEvents as $event)
-                    @php
-                        $canEdit = auth()->user()?->can('update_event') ?? false;
-                        $url = $canEdit
-                            ? \App\Filament\Resources\EventResource::getUrl('edit', ['record' => $event])
-                            : null;
-                    @endphp
-
-                    @if ($url)
-                        <a href="{{ $url }}"
-                            class="group block rounded-lg border border-gray-200 bg-white p-4 transition hover:border-primary-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600">
-                        @else
-                            <div x-data="{ showTooltip: false }"
-                                @click="showTooltip = true; setTimeout(() => showTooltip = false, 2500)"
-                                class="group relative block cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition hover:border-gray-400 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                    @endif
-
-                    <div class="flex items-start gap-4">
-                        <div class="flex flex-col items-center rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-700">
-                            <span class="text-[10px] font-bold uppercase text-gray-500 dark:text-gray-400">
-                                {{ $event->start_at->translatedFormat('M') }}
-                            </span>
-                            <span class="text-lg font-bold text-gray-700 dark:text-gray-200">
-                                {{ $event->start_at->format('d') }}
-                            </span>
-                            <span class="text-[10px] font-medium text-gray-500 dark:text-gray-400">
-                                {{ $event->start_at->format('H:i') }}
-                            </span>
-                        </div>
-
-                        <div class="min-w-0 flex-1">
-                            <h4 class="font-semibold text-gray-900 group-hover:text-primary-600 dark:text-white">
-                                {{ $event->title }}
-                            </h4>
-                            @if ($event->location)
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    📍 {{ $event->location }}
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-
-                    @if (!$url)
-                        <div x-show="showTooltip" x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            class="pointer-events-none absolute -top-2 left-1/2 z-50 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-white px-3 py-2 text-xs font-medium text-gray-800 shadow-lg ring-1 ring-gray-900/10 dark:bg-gray-800 dark:text-gray-100 dark:ring-white/10">
-                            🔒 Este evento es solo de lectura para tu rol
-                        </div>
-                    @endif
-
-                    @if ($url)
-                        </a>
-                    @else
+        @else
+            <div
+                class="flex h-full min-h-[200px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 p-8 text-center dark:border-gray-700">
+                <div class="text-4xl">📭</div>
+                <p class="mt-3 font-semibold text-gray-700 dark:text-gray-300">
+                    No hay eventos para este día
+                </p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Selecciona otro día en el calendario
+                </p>
+                <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}"
+                    class="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700">
+                    + Crear evento
+                </a>
             </div>
             @endif
-            @endforeach
-        </div>
-    @else
-        {{-- ─── Sin eventos ─── --}}
-        <div
-            class="flex h-full min-h-[200px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 p-8 text-center dark:border-gray-700">
-            <div class="text-4xl">📭</div>
-            <p class="mt-3 font-semibold text-gray-700 dark:text-gray-300">
-                No hay eventos para hoy
-            </p>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                La agenda está libre
-            </p>
-            <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}"
-                class="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700">
-                + Crear evento
-            </a>
-        </div>
-        @endif
         </div>
         </div>
     </x-filament::section>

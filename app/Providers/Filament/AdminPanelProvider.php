@@ -88,10 +88,11 @@ class AdminPanelProvider extends PanelProvider
                     ->timezone(config('app.timezone'))
                     ->locale('es')
                     ->config([
+                        // Toolbar simplificado y responsive
                         'headerToolbar' => [
-                            'left' => 'prev,next today',
+                            'left' => 'prev,next',
                             'center' => 'title',
-                            'right' => 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+                            'right' => 'today',
                         ],
                         'buttonText' => [
                             'today' => 'Hoy',
@@ -100,6 +101,26 @@ class AdminPanelProvider extends PanelProvider
                             'day' => 'Día',
                             'list' => 'Lista',
                         ],
+                        // Limitar eventos visibles por día
+                        'dayMaxEvents' => 2,
+                        'dayMaxEventRows' => 2,
+                        'moreLinkText' => '+{{n}} más',
+                        // Altura responsive
+                        'height' => 'auto',
+                        'contentHeight' => 'auto',
+                        'expandRows' => true,
+                        // Formato de hora
+                        'eventTimeFormat' => [
+                            'hour' => '2-digit',
+                            'minute' => '2-digit',
+                            'hour12' => false,
+                        ],
+                        // Responsive
+                        'windowResize' => true,
+                        'handleWindowResize' => true,
+                        // Estilos
+                        'eventDisplay' => 'block',
+                        'dayMaxEvents' => true,
                     ]),
             ])
             ->authMiddleware([
