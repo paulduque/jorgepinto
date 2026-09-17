@@ -16,6 +16,7 @@ class SiteSetting extends Model
         'logo',
         'favicon',
         'agenda_image',
+        'welcome_image',
         'agenda_link_visible',
         'agenda_link_public_only',
         'phone',

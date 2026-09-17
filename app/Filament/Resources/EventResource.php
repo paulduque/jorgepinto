@@ -36,6 +36,24 @@ class EventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function canAccess(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        // Recargar el modelo desde la BD
+        $user = User::find($user->id);
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['super_admin', 'coordinador']);
+    }
+
     // ─────────────────────────────────────────────────────────
     // FORMULARIO
     // ─────────────────────────────────────────────────────────

@@ -5,17 +5,36 @@ namespace App\Filament\Widgets;
 use App\Models\Event;
 use Carbon\Carbon;
 use Filament\Widgets\Widget;
-use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class AgendaWidget extends Widget
 {
-    use HasWidgetShield;
-
     protected static string $view = 'filament.widgets.agenda-widget';
 
     protected int|string|array $columnSpan = 'full';
 
     protected static ?int $sort = 1;
+
+    /**
+     * Controla quién puede ver este widget.
+     * Solo super_admin y coordinador.
+     */
+    public static function canView(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        // Recargar el modelo desde la BD para asegurar que tiene HasRoles
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['super_admin', 'coordinador']);
+    }
 
     /**
      * Pasa datos a la vista.

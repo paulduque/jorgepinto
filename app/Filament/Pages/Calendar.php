@@ -36,11 +36,14 @@ class Calendar extends Page
             return false;
         }
 
-        if (! method_exists($user, 'can')) {
+        // Recargar el modelo desde la BD para asegurar que tiene HasRoles
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
             return false;
         }
 
-        return $user->can('page_Calendar');
+        return $user->hasAnyRole(['super_admin', 'coordinador']);
     }
 
     public static function shouldRegisterNavigation(): bool

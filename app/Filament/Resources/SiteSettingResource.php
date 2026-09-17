@@ -95,6 +95,21 @@ class SiteSettingResource extends Resource
                             ->helperText('Esta imagen se muestra en el hero de /agenda. NO reemplaza las imágenes de los eventos individuales.')
                             ->columnSpanFull(),
 
+                        FileUpload::make('welcome_image')
+                            ->label('Imagen de bienvenida (Dashboard)')
+                            ->image()
+                            ->disk('public')
+                            ->directory('site/welcome')
+                            ->imageEditor()
+                            ->imageEditorAspectRatios(['16:9'])
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeMode('cover')
+                            ->imageResizeTargetWidth(1920)
+                            ->imageResizeTargetHeight(1080)
+                            ->maxSize(5120)
+                            ->helperText('Se muestra en el dashboard a usuarios sin acceso a la agenda.')
+                            ->columnSpanFull(),
+
                         Toggle::make('agenda_link_visible')
                             ->label('Mostrar enlace "Agenda" en el menú')
                             ->helperText('Si está desactivado, el enlace no aparecerá en el menú de navegación.')
