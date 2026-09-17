@@ -52,12 +52,12 @@
     </section>
 
     {{-- Contenido principal --}}
-    <section class="bg-white py-20 md:py-28">
-        <div class="mx-auto max-w-7xl px-6">
-            <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <section class="w-full bg-white py-16 md:py-28">
+        <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+            <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
 
                 {{-- Descripción completa (izquierda) --}}
-                <div class="lg:col-span-8">
+                <div class="min-w-0 lg:col-span-8">
                     <div class="flex items-center gap-4">
                         <span class="text-sm font-bold uppercase tracking-[0.3em] text-blue-700">
                             Sobre este tema
@@ -68,19 +68,19 @@
                     @if ($theme->full_description)
                         {{-- Tarjeta contenedora --}}
                         <div
-                            class="mt-8 rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-8 shadow-sm md:p-12">
+                            class="mt-6 rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm sm:p-8 md:mt-8 md:p-12">
 
                             {{-- Encabezado decorativo --}}
-                            <div class="mb-8 flex items-center gap-4">
+                            <div class="mb-6 flex items-center gap-4 md:mb-8">
                                 <span
-                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 text-white">
+                                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-700 text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </span>
-                                <div>
+                                <div class="min-w-0">
                                     <p class="text-xs font-bold uppercase tracking-[0.25em] text-blue-700">
                                         En detalle
                                     </p>
@@ -92,21 +92,22 @@
 
                             {{-- Contenido enriquecido --}}
                             <div
-                                class="prose prose-xl prose-slate max-w-none
-            prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-950
-            prose-h2:mt-10 prose-h2:text-3xl
-            prose-h3:mt-8 prose-h3:text-2xl
-            prose-p:leading-9 prose-p:text-slate-700 prose-p:text-lg
-            prose-p:my-6
-            prose-a:text-blue-700 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-            prose-strong:font-bold prose-strong:text-slate-950
-            prose-ul:my-6 prose-li:my-3 prose-li:text-lg
-            prose-blockquote:border-l-4 prose-blockquote:border-blue-700 prose-blockquote:bg-blue-50 prose-blockquote:py-2 prose-blockquote:pl-6 prose-blockquote:not-italic prose-blockquote:text-slate-700 prose-blockquote:text-lg">
+                                class="prose prose-base prose-slate max-w-none
+                            prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-950
+                            prose-h2:mt-8 prose-h2:text-2xl md:prose-h2:text-3xl
+                            prose-h3:mt-6 prose-h3:text-xl md:prose-h3:text-2xl
+                            prose-p:leading-7 prose-p:text-slate-700 md:prose-p:leading-9 md:prose-p:text-lg
+                            prose-p:my-4 md:prose-p:my-6
+                            prose-a:text-blue-700 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                            prose-strong:font-bold prose-strong:text-slate-950
+                            prose-ul:my-4 md:prose-ul:my-6 prose-li:my-2 md:prose-li:my-3
+                            prose-blockquote:border-l-4 prose-blockquote:border-blue-700 prose-blockquote:bg-blue-50 prose-blockquote:py-2 prose-blockquote:pl-4 md:prose-blockquote:pl-6 prose-blockquote:not-italic prose-blockquote:text-slate-700">
                                 {!! $theme->full_description !!}
                             </div>
                         </div>
                     @else
-                        <div class="mt-8 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
+                        <div
+                            class="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center md:mt-8 md:p-12">
                             <div class="text-4xl">📝</div>
                             <p class="mt-4 text-lg font-semibold text-slate-600">
                                 Información detallada próximamente
@@ -119,14 +120,14 @@
                 </div>
 
                 {{-- Sidebar (derecha) --}}
-                <aside class="lg:col-span-4">
-                    <div class="sticky top-24 space-y-6">
+                <aside class="min-w-0 lg:col-span-4">
+                    <div class="space-y-6 lg:sticky lg:top-24">
 
                         {{-- Tarjeta de imagen --}}
                         @if ($theme->image)
                             <div class="overflow-hidden rounded-xl">
                                 <img src="{{ asset('storage/' . $theme->image) }}" alt="{{ $theme->title }}"
-                                    class="aspect-[4/3] w-full object-cover">
+                                    class="aspect-[16/9] w-full object-cover">
                             </div>
                         @endif
 
