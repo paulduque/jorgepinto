@@ -23,7 +23,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-white text-slate-900 antialiased">
+<body class="overflow-x-hidden bg-white text-slate-900 antialiased">
 
     @include('components.header')
 
