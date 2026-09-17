@@ -54,6 +54,36 @@ class EventResource extends Resource
         return $user->hasAnyRole(['super_admin', 'coordinador']);
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return static::canAccess();
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::canAccess();
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canAccess();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canAccess();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canAccess();
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return static::canAccess();
+    }
+
     // ─────────────────────────────────────────────────────────
     // FORMULARIO
     // ─────────────────────────────────────────────────────────

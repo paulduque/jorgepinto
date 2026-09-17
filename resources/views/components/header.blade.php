@@ -1,8 +1,14 @@
 @php
     $settings = \App\Models\SiteSetting::current();
     $showAgenda = $settings?->agenda_link_visible ?? true;
-    $agendaOnlyAuth = $settings?->agenda_link_public_only ?? false;
-    $canSeeAgenda = $showAgenda && (!$agendaOnlyAuth || \Illuminate\Support\Facades\Auth::check());
+
+    // Solo super_admin y coordinador pueden ver el enlace
+    $canSeeAgenda = false;
+    if ($showAgenda && \Illuminate\Support\Facades\Auth::check()) {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $roles = $user->roles()->pluck('name')->toArray();
+        $canSeeAgenda = in_array('super_admin', $roles) || in_array('coordinador', $roles);
+    }
 @endphp
 
 <header x-data="{ open: false, searchOpen: false, scrolled: false }" @scroll.window="scrolled = window.scrollY > 20"

@@ -8,9 +8,33 @@ use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    /**
+     * Solo mostrar el widget si:
+     * 1. Estamos en la página de calendario
+     * 2. El usuario tiene rol super_admin o coordinador
+     */
     public static function canView(): bool
     {
-        return request()->routeIs('filament.admin.pages.calendar');
+        // 1. Verificar que estamos en la página de calendario
+        if (! request()->routeIs('filament.admin.pages.calendar')) {
+            return false;
+        }
+
+        // 2. Verificar el rol del usuario
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        // Recargar el modelo desde la BD para asegurar que tiene HasRoles
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasAnyRole(['super_admin', 'coordinador']);
     }
 
     public function fetchEvents(array $fetchInfo): array

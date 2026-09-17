@@ -128,9 +128,11 @@ Route::get('/contacto', function () {
     return view('contact.show');
 });
 
-// Agenda pública
-Route::get('/agenda', [PublicAgendaController::class, 'index'])->name('agenda.index');
-Route::get('/agenda/{event:slug}', [PublicAgendaController::class, 'show'])->name('agenda.show');
+// Agenda pública (solo usuarios logueados con rol permitido)
+Route::middleware(['agenda.access'])->group(function () {
+    Route::get('/agenda', [PublicAgendaController::class, 'index'])->name('agenda.index');
+    Route::get('/agenda/{event:slug}', [PublicAgendaController::class, 'show'])->name('agenda.show');
+});
 
 // Google OAuth
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
