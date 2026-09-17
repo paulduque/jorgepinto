@@ -5,7 +5,7 @@
 @section('content')
 
     {{-- Hero del tema --}}
-    <section class="relative flex min-h-[60vh] items-end overflow-hidden bg-slate-950 md:min-h-[70vh]">
+    <section class="relative min-h-[50vh] w-full overflow-hidden bg-slate-950 md:min-h-[70vh]">
 
         {{-- Imagen de fondo --}}
         @if ($theme->image)
@@ -21,12 +21,15 @@
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
 
         {{-- Contenido --}}
-        <div class="relative mx-auto w-full max-w-7xl px-6 pb-16 pt-24">
-            <div class="max-w-4xl text-white">
+        <div
+            class="relative mx-auto flex min-h-[50vh] w-full max-w-7xl items-end px-6 pb-12 pt-32 md:min-h-[70vh] md:pb-16 md:pt-24">
+            <div class="w-full max-w-4xl text-white">
+
                 {{-- Categoría / Lista --}}
-                <div class="flex items-center gap-4">
-                    <span class="h-1 w-12 bg-blue-400"></span>
-                    <p class="text-xs font-bold uppercase tracking-[0.3em] text-blue-300 md:text-sm">
+                <div class="flex flex-wrap items-center gap-3 md:gap-4">
+                    <span class="h-1 w-8 bg-blue-400 md:w-12"></span>
+                    <p
+                        class="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300 md:text-sm md:tracking-[0.3em]">
                         @if ($settings?->list_number)
                             {{ $settings->list_number }} ·
                         @endif
@@ -34,12 +37,13 @@
                     </p>
                 </div>
 
-                <h1 class="mt-6 text-5xl font-black leading-[0.95] tracking-[-0.03em] md:text-7xl lg:text-8xl">
+                <h1
+                    class="mt-4 text-4xl font-black leading-[0.95] tracking-[-0.03em] sm:text-5xl md:mt-6 md:text-7xl lg:text-8xl">
                     {{ $theme->title }}
                 </h1>
 
                 @if ($theme->description)
-                    <p class="mt-8 max-w-2xl text-lg leading-8 text-slate-200 md:text-xl">
+                    <p class="mt-4 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg md:mt-8 md:text-xl md:leading-8">
                         {{ $theme->description }}
                     </p>
                 @endif
