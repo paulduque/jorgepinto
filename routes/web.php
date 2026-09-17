@@ -10,7 +10,6 @@ use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $settings = SiteSetting::current();
 
     $heroes = Hero::where('is_active', true)->orderBy('id')->get();
 
@@ -126,7 +125,6 @@ Route::get('/perfil', function () {
 });
 
 Route::get('/contacto', function () {
-    $settings = SiteSetting::current();
 
     return view('contact.show', compact('settings'));
 });

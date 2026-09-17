@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
@@ -47,15 +48,14 @@ class ThemeResource extends Resource
                                 }
                             }),
 
-                        TextInput::make('slug')
-                            ->label('Slug')
-                            ->maxLength(255)
-                            ->unique(ignoreRecord: true)
-                            ->helperText('Se genera automáticamente desde el título.'),
-
                         Textarea::make('description')
                             ->label('Descripción')
                             ->rows(4),
+
+                        RichEditor::make('full_description')
+                            ->label('Descripción completa')
+                            ->helperText('Se muestra en la página de detalle del tema. Puedes usar formato enriquecido.')
+                            ->columnSpanFull(),
 
                         FileUpload::make('image')
                             ->label('Imagen')

@@ -13,14 +13,11 @@ class Theme extends Model
     protected $fillable = [
         'title',
         'description',
+        'full_description',
         'image',
         'slug',
         'sort_order',
         'is_active',
-    ];
-
-    protected $casts = [
-        'is_active' => 'boolean',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -28,6 +25,6 @@ class Theme extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug')
-            ->doNotGenerateSlugsOnUpdate();
+            ->doNotGenerateSlugsOnUpdate();  // No regenerar al editar
     }
 }

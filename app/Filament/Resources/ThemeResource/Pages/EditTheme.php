@@ -5,7 +5,6 @@ namespace App\Filament\Resources\ThemeResource\Pages;
 use App\Filament\Resources\ThemeResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Support\Facades\Storage;
 
 class EditTheme extends EditRecord
 {
@@ -16,5 +15,14 @@ class EditTheme extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    // 👈 AGREGAR ESTE MÉTODO
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (empty($data['slug'])) {
+            $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
+        }
+        return $data;
     }
 }
