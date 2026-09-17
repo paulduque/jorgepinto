@@ -5,11 +5,13 @@
 @section('content')
 
     {{-- Hero del tema --}}
-    <section class="relative min-h-[70vh] overflow-hidden bg-slate-950">
+    <section class="relative flex min-h-[60vh] items-end overflow-hidden bg-slate-950 md:min-h-[70vh]">
+
+        {{-- Imagen de fondo --}}
         @if ($theme->image)
             <div class="absolute inset-0">
                 <img src="{{ asset('storage/' . $theme->image) }}" alt="{{ $theme->title }}"
-                    class="h-full w-full object-cover">
+                    class="h-full w-full object-cover object-center">
             </div>
         @endif
 
@@ -19,7 +21,7 @@
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent"></div>
 
         {{-- Contenido --}}
-        <div class="relative mx-auto flex min-h-[70vh] max-w-7xl items-end px-6 pb-16 pt-24">
+        <div class="relative mx-auto w-full max-w-7xl px-6 pb-16 pt-24">
             <div class="max-w-4xl text-white">
                 {{-- Categoría / Lista --}}
                 <div class="flex items-center gap-4">
