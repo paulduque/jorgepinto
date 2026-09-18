@@ -40,4 +40,10 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
+
+    'brevo' => [
+        'key' => env('BREVO_API_KEY'),
+        'from_email' => env('BREVO_FROM_EMAIL'),
+        'from_name' => env('BREVO_FROM_NAME'),
+    ],
 ];

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
+use App\Services\BrevoMailer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
@@ -54,10 +53,9 @@ class ContactController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
-        // 3. Enviar correo de notificación
+        // 3. Enviar correo de notificación por API de Brevo
         try {
-            Mail::to(config('mail.contact_recipient', 'info@jorgepinto.com'))
-                ->send(new ContactMessageReceived($contactMessage));
+            BrevoMailer::sendContactNotification($contactMessage);
         } catch (\Exception $e) {
             Log::error('Error al enviar correo de contacto: ' . $e->getMessage());
         }
