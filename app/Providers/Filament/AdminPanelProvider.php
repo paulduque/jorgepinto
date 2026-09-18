@@ -65,6 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 \App\Filament\Widgets\WelcomeWidget::class,
                 \App\Filament\Widgets\AgendaWidget::class,
+                \App\Filament\Widgets\NewMessagesWidget::class,
                 \App\Filament\Widgets\SiteStatsOverview::class,
                 \App\Filament\Widgets\LatestNewsWidget::class,
                 \App\Filament\Widgets\QuickActionsWidget::class,

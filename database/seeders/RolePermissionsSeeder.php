@@ -59,6 +59,10 @@ class RolePermissionsSeeder extends Seeder
             // Usuarios: solo ver
             'view_user',
             'view_any_user',
+            // Mensajes: Mensajes de contacto
+            'view_contact::message',
+            'view_any_contact::message',
+            'update_contact::message',  // para marcar como leído/respondido
         ]);
 
         // ─────────────────────────────────────────────────────────
@@ -104,6 +108,9 @@ class RolePermissionsSeeder extends Seeder
             // Agenda: solo ver
             'view_event',
             'view_any_event',
+            // Mensajes de contacto (solo ver)
+            'view_contact::message',
+            'view_any_contact::message',
         ]);
 
         // ─────────────────────────────────────────────────────────

@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Event;
+use App\Models\ContactMessage;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class EventPolicy
+class ContactMessagePolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class EventPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_event');
+        return $user->can('view_any_contact::message');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Event $event): bool
+    public function view(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('view_event');
+        return $user->can('view_contact::message');
     }
 
     /**
@@ -31,23 +31,23 @@ class EventPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_event');
+        return $user->can('create_contact::message');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Event $event): bool
+    public function update(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('update_event');
+        return $user->can('update_contact::message');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Event $event): bool
+    public function delete(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('delete_event');
+        return $user->can('delete_contact::message');
     }
 
     /**
@@ -55,15 +55,15 @@ class EventPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_event');
+        return $user->can('delete_any_contact::message');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Event $event): bool
+    public function forceDelete(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('force_delete_event');
+        return $user->can('force_delete_contact::message');
     }
 
     /**
@@ -71,15 +71,15 @@ class EventPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_event');
+        return $user->can('force_delete_any_contact::message');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Event $event): bool
+    public function restore(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('restore_event');
+        return $user->can('restore_contact::message');
     }
 
     /**
@@ -87,15 +87,15 @@ class EventPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_event');
+        return $user->can('restore_any_contact::message');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Event $event): bool
+    public function replicate(User $user, ContactMessage $contactMessage): bool
     {
-        return $user->can('replicate_event');
+        return $user->can('replicate_contact::message');
     }
 
     /**
@@ -103,6 +103,6 @@ class EventPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_event');
+        return $user->can('reorder_contact::message');
     }
 }
