@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
-        Schema::table('site_settings', function (Blueprint $table) {
-            $table->string('favicon')->nullable()->after('logo');
-        });
+        if (! Schema::hasColumn('site_settings', 'favicon')) {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->string('favicon')->nullable()->after('logo');
+            });
+        }
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::table('site_settings', function (Blueprint $table) {
-            $table->dropColumn('favicon');
-        });
+        if (Schema::hasColumn('site_settings', 'favicon')) {
+            Schema::table('site_settings', function (Blueprint $table) {
+                $table->dropColumn('favicon');
+            });
+        }
     }
 };
