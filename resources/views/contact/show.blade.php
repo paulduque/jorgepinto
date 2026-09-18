@@ -363,4 +363,40 @@
         </div>
     </section>
 
+    @push('scripts')
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form[action*="contacto"]');
+
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        grecaptcha.ready(function() {
+                            grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {
+                                    action: 'contact'
+                                })
+                                .then(function(token) {
+                                    // Crear input hidden con el token
+                                    let input = form.querySelector(
+                                        'input[name="g-recaptcha-response"]');
+                                    if (!input) {
+                                        input = document.createElement('input');
+                                        input.type = 'hidden';
+                                        input.name = 'g-recaptcha-response';
+                                        form.appendChild(input);
+                                    }
+                                    input.value = token;
+
+                                    // Enviar el formulario
+                                    form.submit();
+                                });
+                        });
+                    });
+                }
+            });
+        </script>
+    @endpush
+
 @endsection

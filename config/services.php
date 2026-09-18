@@ -46,4 +46,10 @@ return [
         'from_email' => env('BREVO_FROM_EMAIL'),
         'from_name' => env('BREVO_FROM_NAME'),
     ],
+
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+        'score_threshold' => env('RECAPTCHA_SCORE_THRESHOLD', 0.5),
+    ],
 ];

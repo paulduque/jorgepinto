@@ -123,6 +123,11 @@ Route::get('/perfil', function () {
     return view('profile.show', compact('profile'));
 });
 
+// Política de privacidad (LOPDP)
+Route::get('/politica-privacidad', function () {
+    return view('legal.politica-privacidad');
+})->name('politica-privacidad');
+
 // Contacto
 Route::get('/contacto', [App\Http\Controllers\ContactController::class, 'index'])->name('contacto');
 Route::post('/contacto', [App\Http\Controllers\ContactController::class, 'store'])->name('contacto.store');

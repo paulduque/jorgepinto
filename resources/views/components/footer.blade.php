@@ -24,6 +24,7 @@
                     <a href="/perfil" class="block hover:text-white">Jorge Pinto</a>
                     <a href="/temas" class="block hover:text-white">Temas</a>
                     <a href="/noticias" class="block hover:text-white">Noticias</a>
+                    <a href="/politica-privacidad" class="block hover:text-white">Política de Privacidad</a>
                 </div>
             </div>
 

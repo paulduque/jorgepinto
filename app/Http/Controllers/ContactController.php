@@ -6,6 +6,7 @@ use App\Models\ContactMessage;
 use App\Services\BrevoMailer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Rules\Recaptcha;
 
 class ContactController extends Controller
 {
@@ -30,6 +31,7 @@ class ContactController extends Controller
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'min:10', 'max:5000'],
             'consent_given' => ['accepted'],
+            'g-recaptcha-response' => ['required', new Recaptcha],
         ], [
             'name.required' => 'El nombre es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
@@ -37,6 +39,7 @@ class ContactController extends Controller
             'message.required' => 'El mensaje es obligatorio.',
             'message.min' => 'El mensaje debe tener al menos 10 caracteres.',
             'consent_given.accepted' => 'Debes aceptar la política de privacidad.',
+            'g-recaptcha-response.required' => 'La verificación de seguridad es obligatoria.',
         ]);
 
         // 2. Guardar en la base de datos
