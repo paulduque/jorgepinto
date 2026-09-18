@@ -123,10 +123,9 @@ Route::get('/perfil', function () {
     return view('profile.show', compact('profile'));
 });
 
-Route::get('/contacto', function () {
-
-    return view('contact.show');
-});
+// Contacto
+Route::get('/contacto', [App\Http\Controllers\ContactController::class, 'index'])->name('contacto');
+Route::post('/contacto', [App\Http\Controllers\ContactController::class, 'store'])->name('contacto.store');
 
 // Agenda pública (solo usuarios logueados con rol permitido)
 Route::middleware(['agenda.access'])->group(function () {
