@@ -5,20 +5,32 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
-use Filement\Forms\Components\Select;
-use Filement\Forms\Components\DateTimePicker;
-use Filement\Forms\Components\Toggle;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class EventResource extends Resource
 {
@@ -98,9 +110,9 @@ class EventResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                            ->afterStateUpdated(function (string $operation, $state, Set $set) {
                                 if ($operation === 'create') {
-                                    $set('slug', \Illuminate\Support\Str::slug($state));
+                                    $set('slug', Str::slug($state));
                                 }
                             }),
 
@@ -132,7 +144,7 @@ class EventResource extends Resource
                                 Log::info('Imagen actualizada', ['state' => $state]);
                             }),
 
-                        Forms\Components\Select::make('type')
+                        Select::make('type')
                             ->label('Tipo de evento')
                             ->options([
                                 'mitin' => 'Mitin',
@@ -145,7 +157,7 @@ class EventResource extends Resource
                             ->required()
                             ->default('reunion'),
 
-                        Forms\Components\Select::make('status')
+                        Select::make('status')
                             ->label('Estado')
                             ->options([
                                 'planificado' => 'Planificado',
@@ -158,65 +170,65 @@ class EventResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Fecha y hora')
+                Section::make('Fecha y hora')
                     ->schema([
-                        Forms\Components\DateTimePicker::make('start_at')
+                        DateTimePicker::make('start_at')
                             ->label('Inicio')
                             ->required()
                             ->seconds(false)
                             ->native(false),
 
-                        Forms\Components\DateTimePicker::make('end_at')
+                        DateTimePicker::make('end_at')
                             ->label('Fin')
                             ->seconds(false)
                             ->native(false)
                             ->after('start_at'),
 
-                        Forms\Components\Toggle::make('all_day')
+                        Toggle::make('all_day')
                             ->label('Todo el día')
                             ->default(false)
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Ubicación')
+                Section::make('Ubicación')
                     ->schema([
-                        Forms\Components\TextInput::make('location')
+                        TextInput::make('location')
                             ->label('Lugar')
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('address')
+                        TextInput::make('address')
                             ->label('Dirección')
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('latitude')
+                        TextInput::make('latitude')
                             ->label('Latitud')
                             ->numeric()
                             ->step(0.0000001),
 
-                        Forms\Components\TextInput::make('longitude')
+                        TextInput::make('longitude')
                             ->label('Longitud')
                             ->numeric()
                             ->step(0.0000001),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Visibilidad')
+                Section::make('Visibilidad')
                     ->schema([
-                        Forms\Components\Toggle::make('is_public')
+                        Toggle::make('is_public')
                             ->label('Evento público')
                             ->helperText('Si está activo, el evento será visible en la agenda pública.')
                             ->default(false),
 
-                        Forms\Components\ColorPicker::make('color')
+                        ColorPicker::make('color')
                             ->label('Color en el calendario')
                             ->default('#3b82f6'),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Responsables asignados')
+                Section::make('Responsables asignados')
                     ->schema([
-                        Forms\Components\Select::make('assignedUsers')
+                        Select::make('assignedUsers')
                             ->label('Usuarios asignados')
                             ->relationship('assignedUsers', 'name')
                             ->multiple()
@@ -234,13 +246,19 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->label('Título')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
 
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('description')
+                    ->label('Descripción / Notas')
+                    ->limit(60)
+                    ->tooltip(fn($state) => $state)
+                    ->toggleable(isToggledHiddenByDefault: false),
+
+                TextColumn::make('type')
                     ->label('Tipo')
                     ->badge()
                     ->formatStateUsing(fn($state) => match ($state) {
@@ -261,17 +279,17 @@ class EventResource extends Resource
                         default => 'gray',
                     }),
 
-                Tables\Columns\TextColumn::make('start_at')
+                TextColumn::make('start_at')
                     ->label('Inicio')
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('location')
+                TextColumn::make('location')
                     ->label('Lugar')
                     ->searchable()
                     ->limit(30),
 
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->label('Estado')
                     ->badge()
                     ->formatStateUsing(fn($state) => match ($state) {
@@ -289,11 +307,11 @@ class EventResource extends Resource
                         default => 'gray',
                     }),
 
-                Tables\Columns\IconColumn::make('is_public')
+                IconColumn::make('is_public')
                     ->label('Público')
                     ->boolean(),
 
-                Tables\Columns\TextColumn::make('assignedUsers.name')
+                TextColumn::make('assignedUsers.name')
                     ->label('Responsables')
                     ->badge()
                     ->separator(',')
@@ -301,7 +319,7 @@ class EventResource extends Resource
             ])
             ->defaultSort('start_at', 'desc')
             ->filters([
-                Tables\Filters\SelectFilter::make('type')
+                SelectFilter::make('type')
                     ->label('Tipo')
                     ->options([
                         'mitin' => 'Mitin',
@@ -312,7 +330,7 @@ class EventResource extends Resource
                         'otro' => 'Otro',
                     ]),
 
-                Tables\Filters\SelectFilter::make('status')
+                SelectFilter::make('status')
                     ->label('Estado')
                     ->options([
                         'planificado' => 'Planificado',
@@ -321,13 +339,13 @@ class EventResource extends Resource
                         'cancelado' => 'Cancelado',
                     ]),
 
-                Tables\Filters\TernaryFilter::make('is_public')
+                TernaryFilter::make('is_public')
                     ->label('Público'),
 
-                Tables\Filters\Filter::make('start_at')
+                Filter::make('start_at')
                     ->form([
-                        Forms\Components\DatePicker::make('from')->label('Desde'),
-                        Forms\Components\DatePicker::make('until')->label('Hasta'),
+                        DatePicker::make('from')->label('Desde'),
+                        DatePicker::make('until')->label('Hasta'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -336,12 +354,14 @@ class EventResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
+            ->recordUrl(fn($record) => static::getUrl('view', ['record' => $record]))
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
