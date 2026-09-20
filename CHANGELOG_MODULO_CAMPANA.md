@@ -99,10 +99,28 @@ Se actualiza al final de cada sesion de trabajo.
 
 - OK `ZonaResource`
 - OK `SemanaPlanResource`
-- Pendiente `TareaResource`
-- Pendiente `ContactoResource`
+- OK `TareaResource`
+- OK `ContactoResource`
 - Pendiente `ValidadorResource`
 - Pendiente `KpiSemanalResource`
+
+#### 20 sep 2026 - TareaResource
+
+- OK `TareaResource` creado en Filament
+- OK Formulario con titulo, descripcion, semana, responsable, fecha limite, estado, prioridad, orden
+- OK Tabla con edicion inline de estado (SelectColumn)
+- OK Filtros por estado, prioridad y semana
+- OK Fecha limite se muestra en rojo si esta vencida
+- OK Verificado en `/admin/tareas` con las 9 tareas de S1
+
+#### 20 sep 2026 - ContactoResource
+
+- OK `ContactoResource` creado en Filament
+- OK Formulario con nombre, telefono, email, zona, origen, consentimiento
+- OK Toggle de consentimiento con fecha condicional
+- OK Tabla con copiado de telefono y badges de origen
+- OK Filtros por zona, origen y consentimiento
+- OK Verificado en `/admin/contactos`
 
 ---
 

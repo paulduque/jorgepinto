@@ -19,7 +19,9 @@ class Contacto extends Model
         'zona_id',
         'origen',
         'consentimiento',
+        'capturado_por',
         'fecha_consentimiento',
+        'consentimiento_verbal',
         'notas',
     ];
 
@@ -27,6 +29,7 @@ class Contacto extends Model
     {
         return [
             'consentimiento' => 'boolean',
+            'consentimiento_verbal' => 'boolean',
             'fecha_consentimiento' => 'datetime',
         ];
     }
@@ -36,6 +39,11 @@ class Contacto extends Model
     public function zona(): BelongsTo
     {
         return $this->belongsTo(Zona::class);
+    }
+
+    public function capturadoPor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'capturado_por');
     }
 
     // ─── Accesores ─────────────────────────────────────
