@@ -70,6 +70,15 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Verificado con tinker (Zonas: 11, Semanas: 10, Tareas: 9)
 - OK **Fase 1 completada**
 
+#### 20 sep 2026 - ZonaResource
+
+- OK `ZonaResource` creado en Filament
+- OK Formulario con canton, parroquia, prioridad, notas
+- OK Tabla con badges de prioridad y contadores de contactos/validadores
+- OK Filtro por prioridad
+- OK Grupo de navegacion "Campana" con icono de pin
+- OK Verificado en `/admin/zonas` con las 11 zonas cargadas
+
 #### Pendiente Fase 1
 
 - Pendiente: probar migraciones y seeders en VPS MySQL
