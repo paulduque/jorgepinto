@@ -492,3 +492,91 @@ Un ecosistema completo que permita:
 **Fin del prompt maestro.**
 
 > Al recibir este documento, actúa como un desarrollador senior full-stack especializado en Laravel + Filament + Kotlin. Genera código listo para producción, coherente con la arquitectura descrita, y pregunta solo cuando falte información crítica.
+
+---
+
+## 🆕 MÓDULO CAMPAÑA
+
+> Módulo en desarrollo que convierte el mapa estratégico de la campaña
+> (`mapa-campana-pinto-pichincha.md`) en una herramienta viva dentro de Filament.
+
+### Objetivo
+
+Gestionar el avance de la campaña desde el panel administrativo:
+
+1. Consultar el documento maestro de campaña (solo `super_admin`)
+2. Trackear avances por fase y semana
+3. Visualizar KPIs con charts y tableros
+4. Gestionar contactos, validadores, eventos, piezas e incidentes
+5. Compartir KPIs según el rol del usuario
+
+### Estado actual
+
+- **Fase:** 1 (Estructura base)
+- **Rama:** `feature/modulo-campana`
+- **Inicio:** 20 sep 2026
+- **Changelog:** ver `CHANGELOG_MODULO_CAMPANA.md`
+
+### Arquitectura del módulo
+
+FILAMENT /admin
+│
+├── 📊 Dashboard de Campaña (widgets)
+│ ├── KPI Overview (cards)
+│ ├── Chart: Alcance semanal
+│ ├── Chart: Progreso por fase
+│ └── Chart: Contactos por zona
+│
+├── 📁 Campaña (grupo de navegación)
+│ ├── 📄 Documento Maestro (visor .md)
+│ ├── 🎯 Semanas del Plan
+│ ├── ✅ Tareas
+│ ├── 👥 Contactos
+│ ├── ⭐ Validadores
+│ ├── 📍 Zonas
+│ ├── 🎪 Eventos de Campaña
+│ ├── 📸 Piezas Publicadas
+│ ├── 📊 KPIs Semanales
+│ └── ⚠️ Incidentes
+│
+└── ⚙️ Configuración (solo super_admin)
+
+### Tablas del módulo (11)
+
+| Tabla               | Propósito                                       |
+| ------------------- | ----------------------------------------------- |
+| `zonas`             | Cantones y parroquias con prioridad             |
+| `semanas_plan`      | S1 a S7 + Cierre + Oficial + Silencio           |
+| `tareas`            | Tareas operativas                               |
+| `contactos`         | Base de contactos captados (con consentimiento) |
+| `validadores`       | Líderes locales que apoyan la campaña           |
+| `eventos_campana`   | Eventos de campo con métricas                   |
+| `piezas_contenido`  | Piezas publicadas en redes                      |
+| `kpis_semanales`    | KPIs por semana con meta/valor                  |
+| `incidentes`        | Ataques, desinformación, crisis                 |
+| `documento_campana` | Versiones del mapa estratégico (markdown)       |
+
+### Roles y permisos
+
+| Rol           | Acceso                                                         |
+| ------------- | -------------------------------------------------------------- |
+| `super_admin` | Todo                                                           |
+| `coordinador` | Campaña, contactos, validadores, eventos, piezas, KPIs, tareas |
+| `editor`      | Piezas, eventos (lectura), tareas                              |
+| `analista`    | KPIs y charts (solo lectura)                                   |
+| `candidato`   | Dashboard resumido                                             |
+
+### Fases de implementación
+
+- [ ] **Fase 1** — Estructura base (migraciones, modelos, seeders)
+- [ ] **Fase 2** — Recursos Filament (MVP)
+- [ ] **Fase 3** — Documento + Eventos + Piezas + Incidentes
+- [ ] **Fase 4** — Dashboard + Widgets + Charts + Roles
+
+### Reglas del módulo
+
+1. El desarrollo NO compite con la campaña. Máximo 8 h/semana.
+2. Prioridad 1: campaña. Prioridad 2: herramienta.
+3. Cada fase se completa, prueba y hace commit antes de pasar a la siguiente.
+4. El `CHANGELOG_MODULO_CAMPANA.md` se actualiza en cada sesión.
+5. Los datos sensibles (contactos, validadores) requieren consentimiento explícito.
