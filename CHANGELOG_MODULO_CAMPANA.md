@@ -116,10 +116,12 @@ Se actualiza al final de cada sesion de trabajo.
 #### 20 sep 2026 - ContactoResource
 
 - OK `ContactoResource` creado en Filament
-- OK Formulario con nombre, telefono, email, zona, origen, consentimiento
-- OK Toggle de consentimiento con fecha condicional
-- OK Tabla con copiado de telefono y badges de origen
-- OK Filtros por zona, origen y consentimiento
+- OK Migracion adicional: `capturado_por` y `consentimiento_verbal` en contactos
+- OK Modelo `Contacto` actualizado con relacion a User (capturadoPor)
+- OK Formulario con nombre, telefono, email, zona, origen, capturado_por
+- OK Dos toggles de consentimiento: digital y verbal
+- OK Tabla con iconos separados para consentimiento digital y verbal
+- OK Filtros por zona, origen, consentimiento digital y verbal
 - OK Verificado en `/admin/contactos`
 
 ---
