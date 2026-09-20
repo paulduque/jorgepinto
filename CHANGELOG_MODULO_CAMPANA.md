@@ -79,6 +79,14 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Grupo de navegacion "Campana" con icono de pin
 - OK Verificado en `/admin/zonas` con las 11 zonas cargadas
 
+#### 20 sep 2026 - SemanaPlanResource
+
+- OK `SemanaPlanResource` creado en Filament
+- OK Formulario con codigo, fase, fechas, estado, objetivo
+- OK Tabla con badges de estado y contadores de tareas/KPIs
+- OK Filtro por estado
+- OK Verificado en `/admin/semana-plans` con las 10 semanas cargadas
+
 #### Pendiente Fase 1
 
 - Pendiente: probar migraciones y seeders en VPS MySQL
@@ -89,8 +97,8 @@ Se actualiza al final de cada sesion de trabajo.
 
 **Objetivo:** CRUD funcional desde el panel.
 
-- Pendiente `ZonaResource`
-- Pendiente `SemanaPlanResource`
+- OK `ZonaResource`
+- OK `SemanaPlanResource`
 - Pendiente `TareaResource`
 - Pendiente `ContactoResource`
 - Pendiente `ValidadorResource`
