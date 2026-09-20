@@ -27,18 +27,20 @@ Se actualiza al final de cada sesion de trabajo.
 - ✅ Sección "Módulo Campaña" agregada al `PROMPT_MAESTRO_JORGE_PINTO.md`
 - ✅ Changelog inicial creado
 
-#### 20 sep 2026 — Migraciones del módulo completadas
+#### 20 sep 2026 — Modelos Eloquent creados
 
-- ✅ Migración `create_contactos_table`
-- ✅ Migración `create_validadores_table`
-- ✅ Migración `create_eventos_campana_table`
-- ✅ Migración `create_piezas_contenido_table`
-- ✅ Migración `create_kpis_semanales_table`
-- ✅ Migración `create_incidentes_table`
-- ✅ Migración `create_documento_campana_table`
-- ✅ Total: 11 tablas del módulo Campaña creadas
-- ✅ Verificadas con `php artisan db:show --counts` (33 tablas)
-- ⏳ Pendiente: modelos Eloquent, seeders, prueba en MySQL
+- ✅ `Zona` con relaciones (contactos, validadores, eventosCampana, piezasContenido)
+- ✅ `Contacto` con relación a Zona
+- ✅ `Validador` con relación a Zona
+- ✅ `EventoCampana` con relación a Zona
+- ✅ `PiezaContenido` con relación a Zona
+- ✅ `KpiSemanal` con relación a SemanaPlan
+- ✅ `Incidente`
+- ✅ `DocumentoCampana` con relación a User
+- ✅ `SemanaPlan` con relaciones (tareas, kpis)
+- ✅ `Tarea` con relaciones (semana, responsable)
+- ✅ Verificado con tinker (todos los `count()` = 0)
+- ⏳ Pendiente: seeders, prueba en MySQL
 
 ---
 
