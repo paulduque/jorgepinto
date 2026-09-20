@@ -21,26 +21,20 @@ Se actualiza al final de cada sesion de trabajo.
 
 **Objetivo:** crear las tablas, modelos y seeders del modulo.
 
-#### 20 sep 2026 - Arranque
-- OK Rama feature/modulo-campana creada
-- OK Seccion Modulo Campana agregada al PROMPT_MAESTRO_JORGE_PINTO.md
-- OK Changelog inicial creado
-- En progreso Migracion create_zonas_table
-- En progreso Migracion create_semanas_plan_table
-- En progreso Migracion create_tareas_table
+#### 20 sep 2026 — Arranque
 
-#### Pendiente Fase 1
-- Migraciones restantes:
-  - contactos
-  - validadores
-  - eventos_campana
-  - piezas_contenido
-  - kpis_semanales
-  - incidentes
-  - documento_campana
-- Modelos Eloquent con relaciones
-- Seeders: semanas, tareas iniciales de S1, zonas
-- Prueba: php artisan migrate:fresh --seed sin errores
+- ✅ Rama `feature/modulo-campana` creada
+- ✅ Sección "Módulo Campaña" agregada al `PROMPT_MAESTRO_JORGE_PINTO.md`
+- ✅ Changelog inicial creado
+
+#### 20 sep 2026 — Migraciones base completadas
+
+- ✅ Migración `create_zonas_table` aplicada
+- ✅ Migración `create_semanas_plan_table` aplicada
+- ✅ Migración `create_tareas_table` aplicada
+- ✅ Verificadas con `php artisan db:show --counts` (26 tablas)
+- ✅ Verificadas columnas con tinker
+- ⏳ Pendiente: probar en VPS MySQL
 
 ---
 
@@ -83,8 +77,8 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha | Decision | Motivo |
-|-------|----------|--------|
+| Fecha       | Decision                                         | Motivo                    |
+| ----------- | ------------------------------------------------ | ------------------------- |
 | 20 sep 2026 | Implementar modulo Campana como herramienta viva | Mejor que un .md estatico |
-| 20 sep 2026 | Avanzar en rama feature/modulo-campana | Mantener main limpio |
-| 20 sep 2026 | Desarrollo maximo 8h/semana | Prioridad 1: campana |
+| 20 sep 2026 | Avanzar en rama feature/modulo-campana           | Mantener main limpio      |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                      | Prioridad 1: campana      |
