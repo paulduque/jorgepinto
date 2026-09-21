@@ -231,12 +231,14 @@ Se actualiza al final de cada sesion de trabajo.
 
 **Objetivo:** visualizacion de KPIs y permisos por rol.
 
-- Pendiente `KpiOverviewWidget`
-- Pendiente `AlcanceSemanalChart`
-- Pendiente `ProgresoFasesChart`
-- Pendiente `DistribucionZonasChart`
-- Pendiente Definir roles: `super_admin`, `coordinador`, `editor`, `analista`, `candidato`
-- Pendiente Aplicar `canAccess()` / `canView()` a Resources y Widgets
+- OK `KpiOverviewWidget` (tarjetas + modal inline para registrar avance)
+- OK `AlcanceSemanalChart` (grafico de lineas de metas por semana)
+- OK `ProgresoFasesChart` (grafico de barras apiladas de tareas por semana)
+- OK `DistribucionZonasChart` (grafico de dona de contactos por canton)
+- OK `AvanceKpiResource` + sistema de avances diarios
+- OK Widgets del dashboard reordenados (Campana primero, frontend despues)
+- En progreso Definir roles: `super_admin`, `coordinador`, `editor`, `analista`, `candidato`
+- En progreso Aplicar `canAccess()` / `canView()` a Resources y Widgets
 
 #### 20 sep 2026 - Sistema de avances diarios de KPIs
 
@@ -251,6 +253,36 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Recalculo automatico del KPI al guardar un avance
 - OK Actualizacion del widget sin recargar la pagina
 - OK Verificado en `/admin` con todas las funcionalidades
+
+#### 20 sep 2026 - Sistema de avances diarios de KPIs
+
+- OK Migracion `add_unique_constraint_to_kpis_semanales` aplicada
+- OK Constraint unico (semana_id, kpi) - evita duplicados
+- OK Migracion `create_avances_kpi_table` aplicada
+- OK Modelo `AvanceKpi` creado con relaciones a `KpiSemanal` y `User`
+- OK Observer `AvanceKpiObserver` registrado en `AppServiceProvider`
+- OK Resource `AvanceKpiResource` en `/admin/avances-kpi`
+- OK Validacion `unique` en formulario de `KpiSemanalResource` (mensaje amigable)
+- OK KPI mal etiquetado (id 4) corregido: "suscriptores" -> "alcance"
+- OK Verificado con tinker (35 KPIs, constraint funcionando)
+
+#### 20 sep 2026 - Widgets del dashboard
+
+- OK `KpiOverviewWidget` con tarjetas y modal inline para registrar avances
+- OK Modal permite crear/editar avance del dia sin salir del dashboard
+- OK Recalculo automatico del KPI al guardar un avance
+- OK Actualizacion del widget sin recargar la pagina
+- OK `AlcanceSemanalChart` con grafico de lineas (contactos, validadores, suscriptores)
+- OK `ProgresoFasesChart` con grafico de barras apiladas (completadas/en progreso/pendientes)
+- OK `DistribucionZonasChart` con grafico de dona (contactos por canton)
+- OK Widgets reordenados: Agenda (1), Campana (2-5), Frontend (10-14)
+- OK Verificado en `/admin` con los 3 charts funcionando
+
+#### 20 sep 2026 - Limpieza de widgets duplicados
+
+- OK Eliminada carpeta `app/Filament/Resources/AdminResource` (duplicado)
+- OK Eliminados widgets duplicados: `AlcanceSemanalChart.php`, `ProgresoFasesChart.php`
+- OK Widgets correctos confirmados en `app/Filament/Widgets/`
 
 ---
 
@@ -270,12 +302,14 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha       | Decision                                             | Motivo                                       |
-| ----------- | ---------------------------------------------------- | -------------------------------------------- |
-| 20 sep 2026 | Implementar modulo Campana como herramienta viva     | Mejor que un .md estatico                    |
-| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`             | Mantener `main` limpio                       |
-| 20 sep 2026 | Desarrollo maximo 8h/semana                          | Prioridad 1: campana                         |
-| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events | Ya existe la columna, sin migracion extra    |
-| 20 sep 2026 | Avances diarios con modal inline en el dashboard     | Mejor UX que redirigir a un Resource externo |
-| 20 sep 2026 | Constraint unico (semana_id, kpi)                    | Evita duplicados accidentales                |
-| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente   | Evita descuadres por edicion manual          |
+| Fecha       | Decision                                                        | Motivo                                         |
+| ----------- | --------------------------------------------------------------- | ---------------------------------------------- |
+| 20 sep 2026 | Implementar modulo Campana como herramienta viva                | Mejor que un .md estatico                      |
+| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                        | Mantener `main` limpio                         |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                                     | Prioridad 1: campana                           |
+| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events            | Ya existe la columna, sin migracion extra      |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                | Mejor UX que redirigir a un Resource externo   |
+| 20 sep 2026 | Constraint unico (semana_id, kpi)                               | Evita duplicados accidentales                  |
+| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente              | Evita descuadres por edicion manual            |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                | Mejor UX que redirigir a un Resource externo   |
+| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14) | Priorizar el modulo de campana en el dashboard |
