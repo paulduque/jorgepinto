@@ -198,9 +198,20 @@ Se actualiza al final de cada sesion de trabajo.
 **Objetivo:** visor del mapa estrategico y CRUD avanzado.
 
 - OK `DocumentoCampanaResource` (visor markdown)
-- Pendiente `EventoCampanaResource`
+- OK `EventoCampanaResource`
 - Pendiente `PiezaContenidoResource`
 - Pendiente `IncidenteResource`
+
+#### 20 sep 2026 - EventoCampanaResource
+
+- OK `EventoCampanaResource` creado en Filament
+- OK Slug forzado a `eventos-campana`
+- OK Pagina `ListEventosCampana.php` renombrada (evita pluralizacion inglesa)
+- OK Formulario con titulo, fecha, zona, estado, descripcion
+- OK Metricas: contactos_captados, piezas_publicadas
+- OK Tabla con badges de estado y contadores
+- OK Filtros por estado, zona y rango de fechas
+- OK Verificado en `/admin/eventos-campana`
 
 ---
 
