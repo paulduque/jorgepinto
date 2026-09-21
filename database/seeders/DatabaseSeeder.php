@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             ZonaSeeder::class,
             SemanaPlanSeeder::class,
             TareaSeeder::class,
-            KpiSemanalSeeder::class,   // ← nuevo
+            KpiSemanalSeeder::class,
+            DocumentoCampanaSeeder::class,
         ]);
     }
 }
