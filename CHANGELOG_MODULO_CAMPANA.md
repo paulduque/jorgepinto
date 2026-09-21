@@ -101,8 +101,9 @@ Se actualiza al final de cada sesion de trabajo.
 - OK `SemanaPlanResource`
 - OK `TareaResource`
 - OK `ContactoResource`
-- Pendiente `ValidadorResource`
-- Pendiente `KpiSemanalResource`
+- OK `ValidadorResource`
+- OK `KpiSemanalResource`
+- OK **Fase 2 completada**
 
 #### 20 sep 2026 - TareaResource
 
@@ -123,6 +124,27 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Tabla con iconos separados para consentimiento digital y verbal
 - OK Filtros por zona, origen, consentimiento digital y verbal
 - OK Verificado en `/admin/contactos`
+
+#### 20 sep 2026 - ValidadorResource
+
+- OK `ValidadorResource` creado en Filament
+- OK Slug forzado a `validadores` (evita pluralizacion inglesa)
+- OK Formulario con nombre, cargo, telefono, zona, estado, fecha_apoyo, notas
+- OK Tabla con badges de estado y copiado de telefono
+- OK Filtros por estado y zona
+- OK Verificado en `/admin/validadores`
+
+#### 20 sep 2026 - KpiSemanalResource
+
+- OK `KpiSemanalResource` creado en Filament
+- OK Slug forzado a `kpis-semanales`
+- OK Archivo `ListKpiSemanales.php` renombrado (evita pluralizacion inglesa)
+- OK Formulario con semana, kpi, valor, meta, notas
+- OK Tabla con badges de colores por tipo de KPI
+- OK Calculo automatico de cumplimiento (valor / meta)
+- OK Filtros por semana y tipo de KPI
+- OK Verificado en `/admin/kpis-semanales`
+- OK **Fase 2 completada**
 
 ---
 
