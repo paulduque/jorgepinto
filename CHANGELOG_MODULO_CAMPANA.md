@@ -199,8 +199,9 @@ Se actualiza al final de cada sesion de trabajo.
 
 - OK `DocumentoCampanaResource` (visor markdown)
 - OK `EventoCampanaResource`
-- Pendiente `PiezaContenidoResource`
-- Pendiente `IncidenteResource`
+- OK `PiezaContenidoResource`
+- OK `IncidenteResource`
+- OK **Fase 3 completada**
 
 #### 20 sep 2026 - EventoCampanaResource
 
@@ -212,6 +213,17 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Tabla con badges de estado y contadores
 - OK Filtros por estado, zona y rango de fechas
 - OK Verificado en `/admin/eventos-campana`
+
+#### 20 sep 2026 - IncidenteResource
+
+- OK `IncidenteResource` creado en Filament
+- OK Slug forzado a `incidentes`
+- OK Formulario con fecha, tipo, estado, descripcion, respuesta
+- OK Tabla con badges de tipo y estado
+- OK Icono indicador de si tiene respuesta
+- OK Filtros por estado, tipo y rango de fechas
+- OK Verificado en `/admin/incidentes`
+- OK **Fase 3 completada**
 
 ---
 
