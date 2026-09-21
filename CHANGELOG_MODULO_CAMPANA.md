@@ -179,13 +179,25 @@ Se actualiza al final de cada sesion de trabajo.
     - Lineas rojas y fuentes
 - OK Fuentes: RPubs (padron 2026) + PDF CNE 2021
 
+#### 20 sep 2026 - DocumentoCampanaResource
+
+- OK `DocumentoCampanaSeeder` creado y ejecutado (1 documento cargado)
+- OK `DocumentoCampanaResource` creado en Filament
+- OK Slug forzado a `documento-maestro`
+- OK Acceso restringido solo a `super_admin` (via canAccess)
+- OK Sin creacion ni eliminacion (documento unico)
+- OK MarkdownEditor en formulario de edicion
+- OK Vista custom `documento-campana.blade.php` con estilos del front
+- OK Boton "Editar documento" visible en el hero
+- OK Verificado en `/admin/documento-maestro`
+
 ---
 
 ### Fase 3 - Documento + Eventos + Piezas + Incidentes
 
 **Objetivo:** visor del mapa estrategico y CRUD avanzado.
 
-- Pendiente `DocumentoCampanaResource` (visor markdown)
+- OK `DocumentoCampanaResource` (visor markdown)
 - Pendiente `EventoCampanaResource`
 - Pendiente `PiezaContenidoResource`
 - Pendiente `IncidenteResource`
