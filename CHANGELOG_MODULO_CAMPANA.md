@@ -168,6 +168,17 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Metas por KPI calculadas con datos reales
 - OK Progresión semanal definida (S1-S7)
 
+#### 20 sep 2026 - Documento de estrategias
+
+- OK `ESTRATEGIAS_CAMPANA.md` creado con:
+    - Analisis del terreno 2021 (padron Pichincha, resultados 1ra y 2da vuelta)
+    - Objetivos por KPI con justificacion
+    - Progresion semanal (S1-S7)
+    - Estrategias por KPI
+    - Estrategias por zona
+    - Lineas rojas y fuentes
+- OK Fuentes: RPubs (padron 2026) + PDF CNE 2021
+
 ---
 
 ### Fase 3 - Documento + Eventos + Piezas + Incidentes
