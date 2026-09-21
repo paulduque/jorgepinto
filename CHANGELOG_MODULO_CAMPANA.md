@@ -146,6 +146,28 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Verificado en `/admin/kpis-semanales`
 - OK **Fase 2 completada**
 
+#### 20 sep 2026 - KpiSemanalSeeder con metas y justificaciones
+
+- OK `KpiSemanalSeeder` creado
+- OK 35 KPIs cargados (7 semanas × 5 KPIs: contactos, validadores, suscriptores, alcance, eventos)
+- OK Cada KPI incluye justificación en campo `notas`:
+    - Fuente: Proyección CNE 2021 + padrón Pichincha 2026 (RPubs)
+    - Cálculo: 5% de los 574.000 votos necesarios para ganar
+    - Referencia: resultados Asambleístas Pichincha 2021
+- OK Metas cargadas por semana (progresión exponencial):
+    - Contactos: 500 → 28.700
+    - Validadores: 10 → 57
+    - Suscriptores: 1.000 → 57.400
+    - Alcance: 250K → 3.5M
+- OK Verificado con tinker (35 registros)
+- OK `DatabaseSeeder` actualizado con `KpiSemanalSeeder`
+
+#### Documento de estrategias
+
+- OK Análisis del terreno 2021 documentado
+- OK Metas por KPI calculadas con datos reales
+- OK Progresión semanal definida (S1-S7)
+
 ---
 
 ### Fase 3 - Documento + Eventos + Piezas + Incidentes
