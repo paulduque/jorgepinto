@@ -237,8 +237,12 @@ Se actualiza al final de cada sesion de trabajo.
 - OK `DistribucionZonasChart` (grafico de dona de contactos por canton)
 - OK `AvanceKpiResource` + sistema de avances diarios
 - OK Widgets del dashboard reordenados (Campana primero, frontend despues)
-- En progreso Definir roles: `super_admin`, `coordinador`, `editor`, `analista`, `candidato`
-- En progreso Aplicar `canAccess()` / `canView()` a Resources y Widgets
+- OK Roles definidos: `super_admin`, `coordinador`, `editor`, `publicista`, `colaborador`
+- OK Permisos generados por Shield (20 Resources, 11 Widgets, 1 Page)
+- OK `CampanaRolePermissionsSeeder` con matriz de permisos por rol
+- OK `canAccess()` verificado en Resources criticos (DocumentoCampana solo super_admin)
+- OK `WelcomeWidget` restringido solo a colaboradores
+- OK **Fase 4 completada**
 
 #### 20 sep 2026 - Sistema de avances diarios de KPIs
 
@@ -284,6 +288,24 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Eliminados widgets duplicados: `AlcanceSemanalChart.php`, `ProgresoFasesChart.php`
 - OK Widgets correctos confirmados en `app/Filament/Widgets/`
 
+#### 20 sep 2026 - Sistema de roles y permisos
+
+- OK `php artisan shield:generate --all` ejecutado
+- OK 20 Policies generadas por Shield para los Resources
+- OK Permisos generados: 246 en total
+- OK `CampanaRolePermissionsSeeder` creado con matriz de permisos
+- OK Roles definidos con permisos:
+    - `super_admin`: 246 permisos (todo)
+    - `coordinador`: 90 permisos (campana + frontend, sin Documento Maestro)
+    - `editor`: 44 permisos (contenido + avances)
+    - `publicista`: 15 permisos (solo piezas de contenido)
+    - `colaborador`: 20 permisos (captacion + lectura)
+- OK `canAccess()` verificado en `DocumentoCampanaResource` (solo super_admin)
+- OK `canAccess()` verificado en `EventResource` y `UserResource` (super_admin + coordinador)
+- OK `WelcomeWidget` restringido solo a colaboradores (imagen del SiteSetting)
+- OK 7 usuarios de prueba creados con roles asignados
+- OK Verificado con cada rol en `/admin`
+
 ---
 
 ## Resumen de la Fase 1
@@ -302,14 +324,17 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha       | Decision                                                        | Motivo                                         |
-| ----------- | --------------------------------------------------------------- | ---------------------------------------------- |
-| 20 sep 2026 | Implementar modulo Campana como herramienta viva                | Mejor que un .md estatico                      |
-| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                        | Mantener `main` limpio                         |
-| 20 sep 2026 | Desarrollo maximo 8h/semana                                     | Prioridad 1: campana                           |
-| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events            | Ya existe la columna, sin migracion extra      |
-| 20 sep 2026 | Avances diarios con modal inline en el dashboard                | Mejor UX que redirigir a un Resource externo   |
-| 20 sep 2026 | Constraint unico (semana_id, kpi)                               | Evita duplicados accidentales                  |
-| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente              | Evita descuadres por edicion manual            |
-| 20 sep 2026 | Avances diarios con modal inline en el dashboard                | Mejor UX que redirigir a un Resource externo   |
-| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14) | Priorizar el modulo de campana en el dashboard |
+| Fecha       | Decision                                                                   | Motivo                                         |
+| ----------- | -------------------------------------------------------------------------- | ---------------------------------------------- |
+| 20 sep 2026 | Implementar modulo Campana como herramienta viva                           | Mejor que un .md estatico                      |
+| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                                   | Mantener `main` limpio                         |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                                                | Prioridad 1: campana                           |
+| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events                       | Ya existe la columna, sin migracion extra      |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo   |
+| 20 sep 2026 | Constraint unico (semana_id, kpi)                                          | Evita duplicados accidentales                  |
+| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente                         | Evita descuadres por edicion manual            |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo   |
+| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14)            | Priorizar el modulo de campana en el dashboard |
+| 20 sep 2026 | Roles definidos: super_admin, coordinador, editor, publicista, colaborador | Adaptado a los roles reales del equipo         |
+| 20 sep 2026 | Permisos via Shield + Policies (no canAccess manual)                       | Arquitectura escalable y mantenible            |
+| 20 sep 2026 | WelcomeWidget solo para colaboradores                                      | La imagen es para trabajo de campo             |
