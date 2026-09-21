@@ -11,7 +11,7 @@ class WelcomeWidget extends Widget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 10;
 
     /**
      * Solo mostrar a usuarios que NO tienen acceso a la agenda.

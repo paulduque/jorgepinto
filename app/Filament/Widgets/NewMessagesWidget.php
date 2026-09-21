@@ -11,7 +11,7 @@ class NewMessagesWidget extends BaseWidget
 {
     protected static ?string $heading = 'Mensajes nuevos';
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 11;
 
     protected int|string|array $columnSpan = 'full';
 

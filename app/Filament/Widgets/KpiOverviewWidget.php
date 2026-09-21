@@ -22,7 +22,7 @@ class KpiOverviewWidget extends Widget implements HasForms
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     // Estado del modal
     public ?int $kpiSemanalId = null;

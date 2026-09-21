@@ -2,17 +2,17 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\KpiSemanal;
 use App\Models\SemanaPlan;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 
-class AlcanceSemanalChart extends ChartWidget
+class ProgresoFasesChart extends ChartWidget
 {
-    protected static ?string $heading = 'Progreso semanal de metas';
+    protected static ?string $heading = 'Progreso de tareas por semana';
 
-    protected static ?string $description = 'Evolución de las metas (contactos, validadores, suscriptores) semana a semana';
+    protected static ?string $description = 'Tareas completadas vs pendientes por semana del plan';
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 4;
 
     protected int|string|array $columnSpan = 'full';
 
@@ -20,7 +20,7 @@ class AlcanceSemanalChart extends ChartWidget
 
     public static function canView(): bool
     {
-        $user = \Filament\Facades\Filament::auth()->user();
+        $user = Filament::auth()->user();
 
         if (! $user) {
             return false;
@@ -37,46 +37,38 @@ class AlcanceSemanalChart extends ChartWidget
     {
         $semanas = SemanaPlan::orderBy('fecha_inicio')->get();
 
-        $contactos = [];
-        $validadores = [];
-        $suscriptores = [];
+        $completadas = [];
+        $enProgreso = [];
+        $pendientes = [];
         $labels = [];
 
         foreach ($semanas as $semana) {
             $labels[] = $semana->codigo;
 
-            $kpis = KpiSemanal::where('semana_id', $semana->id)->get()->keyBy('kpi');
-
-            $contactos[] = (float) ($kpis->get('contactos')?->meta ?? 0);
-            $validadores[] = (float) ($kpis->get('validadores')?->meta ?? 0);
-            $suscriptores[] = (float) ($kpis->get('suscriptores')?->meta ?? 0);
+            $completadas[] = $semana->tareas()->where('estado', 'completada')->count();
+            $enProgreso[] = $semana->tareas()->where('estado', 'en_curso')->count();
+            $pendientes[] = $semana->tareas()->whereIn('estado', ['pendiente', 'bloqueada'])->count();
         }
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Contactos',
-                    'data' => $contactos,
-                    'borderColor' => '#3b82f6',
-                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
-                    'tension' => 0.3,
-                    'fill' => true,
-                ],
-                [
-                    'label' => 'Validadores',
-                    'data' => $validadores,
-                    'borderColor' => '#f59e0b',
-                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                    'tension' => 0.3,
-                    'fill' => true,
-                ],
-                [
-                    'label' => 'Suscriptores WhatsApp',
-                    'data' => $suscriptores,
+                    'label' => 'Completadas',
+                    'data' => $completadas,
+                    'backgroundColor' => '#10b981',
                     'borderColor' => '#10b981',
-                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'tension' => 0.3,
-                    'fill' => true,
+                ],
+                [
+                    'label' => 'En progreso',
+                    'data' => $enProgreso,
+                    'backgroundColor' => '#f59e0b',
+                    'borderColor' => '#f59e0b',
+                ],
+                [
+                    'label' => 'Pendientes',
+                    'data' => $pendientes,
+                    'backgroundColor' => '#e5e7eb',
+                    'borderColor' => '#d1d5db',
                 ],
             ],
             'labels' => $labels,
@@ -85,7 +77,7 @@ class AlcanceSemanalChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'line';
+        return 'bar';
     }
 
     protected function getOptions(): array
@@ -98,7 +90,11 @@ class AlcanceSemanalChart extends ChartWidget
                 ],
             ],
             'scales' => [
+                'x' => [
+                    'stacked' => true,
+                ],
                 'y' => [
+                    'stacked' => true,
                     'beginAtZero' => true,
                     'ticks' => [
                         'precision' => 0,

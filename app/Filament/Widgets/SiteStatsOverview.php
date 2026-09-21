@@ -13,7 +13,7 @@ class SiteStatsOverview extends BaseWidget
 {
     use HasWidgetShield;
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 12;
 
     protected function getStats(): array
     {
