@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
+use App\Models\AvanceKpi;
 use App\Models\SiteSetting;
+use App\Observers\AvanceKpiObserver;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,9 +23,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // 👈 Compartir $settings en TODAS las vistas
+        // Compartir $settings en TODAS las vistas
         View::composer('*', function ($view) {
             $view->with('settings', SiteSetting::current());
         });
+
+        // Registrar observer de AvanceKpi
+        AvanceKpi::observe(AvanceKpiObserver::class);
     }
 }

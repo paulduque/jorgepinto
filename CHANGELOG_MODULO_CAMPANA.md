@@ -238,6 +238,20 @@ Se actualiza al final de cada sesion de trabajo.
 - Pendiente Definir roles: `super_admin`, `coordinador`, `editor`, `analista`, `candidato`
 - Pendiente Aplicar `canAccess()` / `canView()` a Resources y Widgets
 
+#### 20 sep 2026 - Sistema de avances diarios de KPIs
+
+- OK Migracion `add_unique_constraint_to_kpis_semanales` aplicada
+- OK Constraint unico (semana_id, kpi) - evita duplicados
+- OK Migracion `create_avances_kpi_table` aplicada
+- OK Modelo `AvanceKpi` creado con relaciones
+- OK Observer `AvanceKpiObserver` registrado en AppServiceProvider
+- OK Resource `AvanceKpiResource` en `/admin/avances-kpi`
+- OK Validacion `unique` en formulario de KpiSemanalResource (mensaje amigable)
+- OK `KpiOverviewWidget` mejorado con modal inline para registrar avances
+- OK Recalculo automatico del KPI al guardar un avance
+- OK Actualizacion del widget sin recargar la pagina
+- OK Verificado en `/admin` con todas las funcionalidades
+
 ---
 
 ## Resumen de la Fase 1
@@ -256,9 +270,12 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha       | Decision                                             | Motivo                                    |
-| ----------- | ---------------------------------------------------- | ----------------------------------------- |
-| 20 sep 2026 | Implementar modulo Campana como herramienta viva     | Mejor que un .md estatico                 |
-| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`             | Mantener `main` limpio                    |
-| 20 sep 2026 | Desarrollo maximo 8h/semana                          | Prioridad 1: campana                      |
-| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events | Ya existe la columna, sin migracion extra |
+| Fecha       | Decision                                             | Motivo                                       |
+| ----------- | ---------------------------------------------------- | -------------------------------------------- |
+| 20 sep 2026 | Implementar modulo Campana como herramienta viva     | Mejor que un .md estatico                    |
+| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`             | Mantener `main` limpio                       |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                          | Prioridad 1: campana                         |
+| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events | Ya existe la columna, sin migracion extra    |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard     | Mejor UX que redirigir a un Resource externo |
+| 20 sep 2026 | Constraint unico (semana_id, kpi)                    | Evita duplicados accidentales                |
+| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente   | Evita descuadres por edicion manual          |

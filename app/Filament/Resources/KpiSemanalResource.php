@@ -43,7 +43,8 @@ class KpiSemanalResource extends Resource
                             ->relationship('semana', 'codigo')
                             ->searchable()
                             ->preload()
-                            ->required(),
+                            ->required()
+                            ->live(),
 
                         Forms\Components\Select::make('kpi')
                             ->label('KPI')
@@ -56,7 +57,16 @@ class KpiSemanalResource extends Resource
                                 'reconocimiento' => 'Reconocimiento de nombre (%)',
                             ])
                             ->required()
-                            ->searchable(),
+                            ->searchable()
+                            ->unique(
+                                ignoreRecord: true,
+                                modifyRuleUsing: function (\Illuminate\Validation\Rules\Unique $rule, \Filament\Forms\Get $get) {
+                                    return $rule->where('semana_id', $get('semana_id'));
+                                }
+                            )
+                            ->validationMessages([
+                                'unique' => 'Ya existe este KPI para la semana seleccionada. Si necesitas modificarlo, edita el registro existente.',
+                            ]),
 
                         Forms\Components\TextInput::make('valor')
                             ->label('Valor')
