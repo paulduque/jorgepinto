@@ -162,12 +162,6 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Verificado con tinker (35 registros)
 - OK `DatabaseSeeder` actualizado con `KpiSemanalSeeder`
 
-#### Documento de estrategias
-
-- OK Análisis del terreno 2021 documentado
-- OK Metas por KPI calculadas con datos reales
-- OK Progresión semanal definida (S1-S7)
-
 #### 20 sep 2026 - Documento de estrategias
 
 - OK `ESTRATEGIAS_CAMPANA.md` creado con:
@@ -257,18 +251,6 @@ Se actualiza al final de cada sesion de trabajo.
 - OK Recalculo automatico del KPI al guardar un avance
 - OK Actualizacion del widget sin recargar la pagina
 - OK Verificado en `/admin` con todas las funcionalidades
-
-#### 20 sep 2026 - Sistema de avances diarios de KPIs
-
-- OK Migracion `add_unique_constraint_to_kpis_semanales` aplicada
-- OK Constraint unico (semana_id, kpi) - evita duplicados
-- OK Migracion `create_avances_kpi_table` aplicada
-- OK Modelo `AvanceKpi` creado con relaciones a `KpiSemanal` y `User`
-- OK Observer `AvanceKpiObserver` registrado en `AppServiceProvider`
-- OK Resource `AvanceKpiResource` en `/admin/avances-kpi`
-- OK Validacion `unique` en formulario de `KpiSemanalResource` (mensaje amigable)
-- OK KPI mal etiquetado (id 4) corregido: "suscriptores" -> "alcance"
-- OK Verificado con tinker (35 KPIs, constraint funcionando)
 
 #### 20 sep 2026 - Widgets del dashboard
 
