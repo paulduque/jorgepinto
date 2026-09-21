@@ -27,7 +27,7 @@ class PiezaContenidoResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 6;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO

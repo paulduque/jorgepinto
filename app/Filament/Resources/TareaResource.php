@@ -27,7 +27,7 @@ class TareaResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO

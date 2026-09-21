@@ -27,7 +27,7 @@ class ValidadorResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 8;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO

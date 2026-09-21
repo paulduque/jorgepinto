@@ -27,7 +27,7 @@ class EventoCampanaResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 5;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO

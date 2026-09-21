@@ -27,7 +27,7 @@ class DocumentoCampanaResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 1;
 
     // ─────────────────────────────────────────────────────────
     // ACCESO: solo super_admin

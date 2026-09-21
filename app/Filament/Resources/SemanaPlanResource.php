@@ -25,7 +25,7 @@ class SemanaPlanResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 10;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO

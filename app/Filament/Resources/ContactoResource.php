@@ -25,7 +25,7 @@ class ContactoResource extends Resource
 
     protected static ?string $navigationGroup = 'Campaña';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 7;
 
     // ─────────────────────────────────────────────────────────
     // FORMULARIO
