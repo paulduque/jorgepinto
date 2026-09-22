@@ -2,6 +2,11 @@
 
 @section('title', $news->title . ' | Jorge Pinto')
 
+@section('og_type', 'article')
+@section('og_title', $news->title)
+@section('og_description', $news->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($news->content), 150))
+@section('og_image', $news->image ? asset('storage/' . $news->image) : asset('favicon.png'))
+
 @section('content')
 
     {{-- Encabezado --}}

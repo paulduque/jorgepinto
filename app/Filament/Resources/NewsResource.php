@@ -82,12 +82,12 @@ class NewsResource extends Resource
                             ->directory('news')
                             ->imageEditor()
                             ->imageEditorAspectRatios([
-                                '16:9',
+                                '1.91:1',
                             ])
-                            ->imageCropAspectRatio('16:9')
+                            ->imageCropAspectRatio('1.91:1')
                             ->imageResizeMode('cover')
-                            ->imageResizeTargetWidth(1280)
-                            ->imageResizeTargetHeight(720)
+                            ->imageResizeTargetWidth(1200)
+                            ->imageResizeTargetHeight(630)
                             ->maxSize(5120),
                     ])
                     ->columns(2),

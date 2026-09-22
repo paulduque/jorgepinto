@@ -2,6 +2,11 @@
 
 @section('title', 'Jorge Pinto | Sitio Oficial')
 
+@section('og_type', 'website')
+@section('og_title', 'Jorge Pinto | Sitio Oficial')
+@section('og_description', $settings?->site_description ?? 'Candidato a la Prefectura de Pichincha 2026.')
+@section('og_image', $settings?->welcome_image ? asset('storage/' . $settings->welcome_image) : asset('favicon.png'))
+
 @section('content')
 
     {{-- HERO --}}
