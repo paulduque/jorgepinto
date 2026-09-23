@@ -599,7 +599,7 @@ Al generar código, cubre estos casos:
 10. Validar siempre la entrada del usuario
 11. Usar `Filament::auth()->user()` en lugar de `auth()->user()` en contextos de Filament
 12. Recargar el modelo User desde la BD (`User::find($user->id)`) antes de usar `->can()` o `->hasRole()`
-13. Los permisos se controlan exclusivamente con Shield (no `canAccess` manual)
+13. Los permisos se controlan **exclusivamente** con Shield. **Nunca** escribir `canAccess()` con `hasRole('super_admin')` hardcodeado: si necesitas restringir un Resource, crea un permiso con Shield y asígnalo al rol correspondiente.
 
 ---
 
@@ -683,6 +683,25 @@ FILAMENT /admin
 - **Modal inline en `KpiOverviewWidget`:** permite registrar el avance sin salir del dashboard.
 - **Constraint único:** un solo avance por KPI por día.
 
+### Acceso al Documento Maestro
+
+El `DocumentoCampanaResource` (`/admin/documento-maestro`) ya **no usa `canAccess()` hardcodeado**. Su acceso se controla exclusivamente con permisos de Shield:
+
+| Permiso                       | Para qué sirve            |
+| ----------------------------- | ------------------------- |
+| `view_any_documento::campana` | Ver la entrada en el menú |
+| `view_documento::campana`     | Ver el detalle            |
+| `update_documento::campana`   | Editar el documento       |
+
+**Asignación por rol (estado actual en producción):**
+
+- `super_admin`: todos (vía `Permission::all()`)
+- `coordinador`: `view_any` + `view` + `update`
+- `editor`: `view_any` + `view`
+- `publicista` y `colaborador`: sin acceso
+
+**Importante:** el `CampanaRolePermissionsSeeder` documenta estos permisos como referencia en el repo, pero **NO se ejecuta en el VPS** para no sobrescribir la configuración manual de roles en producción.
+
 ### Tablas del módulo (11)
 
 | Tabla               | Propósito                                       |
@@ -748,13 +767,13 @@ FILAMENT /admin
 
 ### Roles y permisos
 
-| Rol           | Permisos | Descripción                                         |
-| ------------- | -------- | --------------------------------------------------- |
-| `super_admin` | 246      | Todo el sistema                                     |
-| `coordinador` | 90       | Campaña completa + frontend (sin Documento Maestro) |
-| `editor`      | 44       | Contenido, tareas, eventos, piezas, avances         |
-| `publicista`  | 15       | Solo piezas de contenido                            |
-| `colaborador` | 20       | Captación (contactos, avances) + lectura            |
+| Rol           | Permisos | Descripción                                                                    |
+| ------------- | -------- | ------------------------------------------------------------------------------ |
+| `super_admin` | 246      | Todo el sistema                                                                |
+| `coordinador` | 93       | Campaña completa + frontend + Documento Maestro (lectura y edición)            |
+| `editor`      | 46       | Contenido, tareas, eventos, piezas, avances + Documento Maestro (solo lectura) |
+| `publicista`  | 15       | Solo piezas de contenido                                                       |
+| `colaborador` | 20       | Captación (contactos, avances) + lectura                                       |
 
 ### Fases de implementación
 

@@ -171,6 +171,40 @@ Se actualiza al final de cada sesion de trabajo.
 
 ---
 
+### Sesión 23 sep 2026 - Acceso al Documento Maestro por rol
+
+**Objetivo:** permitir que roles distintos a `super_admin` puedan acceder al Documento Maestro sin hardcodear `canAccess()`.
+
+#### Problema detectado
+
+- `DocumentoCampanaResource` tenía `canAccess()` con `hasRole('super_admin')` hardcodeado.
+- Eso impedía que `coordinador`, `editor` u otros roles pudieran ver el recurso, aunque tuvieran permisos de Shield.
+- Además, violaba la regla del Prompt Maestro: "los permisos se controlan exclusivamente con Shield".
+
+#### Solución aplicada
+
+- OK Se eliminó el método `canAccess()` de `DocumentoCampanaResource.php` (-18 líneas)
+- OK Se agregaron los permisos del Documento Maestro al `CampanaRolePermissionsSeeder` (+7 líneas) como referencia en el repo:
+    - `coordinador`: `view_any_documento::campana`, `view_documento::campana`, `update_documento::campana`
+    - `editor`: `view_any_documento::campana`, `view_documento::campana`
+- OK Se ejecutó `php artisan shield:generate --resource=DocumentoCampanaResource --panel=admin` en el VPS
+    - Generó `DocumentoCampanaPolicy.php` + 12 permisos
+- OK Se limpiaron cachés en el VPS:
+    - `php artisan permission:cache-reset`
+    - `php artisan optimize:clear`
+    - `php artisan filament:cache-components`
+- OK Se asignaron los permisos **manualmente** en `/admin/roles` del VPS
+    - **NO** se ejecutó el Seeder en el VPS (para no sobrescribir roles configurados manualmente)
+- OK Verificado: usuario `coordinador` ve y accede al Documento Maestro ✅
+
+#### Decisión importante
+
+- El Seeder queda actualizado en el repo como **fuente de verdad documental**, pero **NO se ejecuta en producción**.
+- Los permisos del VPS se gestionan manualmente desde `/admin/roles`.
+- Documentar este flujo en `PROMPT_MAESTRO_JORGE_PINTO.md` (sección "Acceso al Documento Maestro").
+
+---
+
 ## Resumen de la Fase 1
 
 | Componente       | Cantidad |
@@ -187,17 +221,22 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha       | Decision                                                                   | Motivo                                         |
-| ----------- | -------------------------------------------------------------------------- | ---------------------------------------------- |
-| 20 sep 2026 | Implementar modulo Campana como herramienta viva                           | Mejor que un .md estatico                      |
-| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                                   | Mantener `main` limpio                         |
-| 20 sep 2026 | Desarrollo maximo 8h/semana                                                | Prioridad 1: campana                           |
-| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events                       | Ya existe la columna, sin migracion extra      |
-| 20 sep 2026 | Constraint unico (semana_id, kpi)                                          | Evita duplicados accidentales                  |
-| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente                         | Evita descuadres por edicion manual            |
-| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo   |
-| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14)            | Priorizar el modulo de campana en el dashboard |
-| 20 sep 2026 | Roles definidos: super_admin, coordinador, editor, publicista, colaborador | Adaptado a los roles reales del equipo         |
-| 20 sep 2026 | Permisos via Shield + Policies (no canAccess manual)                       | Arquitectura escalable y mantenible            |
-| 20 sep 2026 | WelcomeWidget solo para colaboradores                                      | La imagen es para trabajo de campo             |
-| 20 sep 2026 | Resources ordenados por jerarquia (estrategico > operativo > datos)        | Coherencia con los widgets del dashboard       |
+| Fecha       | Decision                                                                   | Motivo                                                 |
+| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
+| 20 sep 2026 | Implementar modulo Campana como herramienta viva                           | Mejor que un .md estatico                              |
+| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                                   | Mantener `main` limpio                                 |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                                                | Prioridad 1: campana                                   |
+| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events                       | Ya existe la columna, sin migracion extra              |
+| 20 sep 2026 | Constraint unico (semana_id, kpi)                                          | Evita duplicados accidentales                          |
+| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente                         | Evita descuadres por edicion manual                    |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo           |
+| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14)            | Priorizar el modulo de campana en el dashboard         |
+| 20 sep 2026 | Roles definidos: super_admin, coordinador, editor, publicista, colaborador | Adaptado a los roles reales del equipo                 |
+| 20 sep 2026 | Permisos via Shield + Policies (no canAccess manual)                       | Arquitectura escalable y mantenible                    |
+| 20 sep 2026 | WelcomeWidget solo para colaboradores                                      | La imagen es para trabajo de campo                     |
+| 20 sep 2026 | Resources ordenados por jerarquia (estrategico > operativo > datos)        | Coherencia con los widgets del dashboard               |
+| 23 sep 2026 | Eliminar `canAccess()` hardcodeado del Documento Maestro                   | Permitir acceso a más roles vía Shield                 |
+| 23 sep 2026 | Asignar permisos del Documento Maestro manualmente en el VPS               | Evitar que `syncPermissions` sobrescriba config manual |
+| 23 sep 2026 | Seeder actualizado en repo, pero NO ejecutado en VPS                       | Documentar sin romper la configuración en producción   |
+| 23 sep 2026 | `coordinador` con `view + view_any + update` del Documento Maestro         | Puede leer y editar el documento estratégico           |
+| 23 sep 2026 | `editor` con `view + view_any` del Documento Maestro                       | Solo lectura del documento estratégico                 |
