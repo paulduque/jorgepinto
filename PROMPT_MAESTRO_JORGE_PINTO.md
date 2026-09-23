@@ -667,6 +667,15 @@ FILAMENT /admin
 │
 └── ⚙️ Configuración (solo super_admin)
 
+### Widgets del dashboard (4)
+
+| Widget                   | Permiso                         | Descripción                       |
+| ------------------------ | ------------------------------- | --------------------------------- |
+| `KpiOverviewWidget`      | `widget_KpiOverviewWidget`      | Tarjetas de KPIs con modal inline |
+| `AlcanceSemanalChart`    | `widget_AlcanceSemanalChart`    | Gráfico de líneas                 |
+| `ProgresoFasesChart`     | `widget_ProgresoFasesChart`     | Gráfico de barras apiladas        |
+| `DistribucionZonasChart` | `widget_DistribucionZonasChart` | Gráfico de dona                   |
+
 ### Sistema de avances diarios
 
 - **Tabla `avances_kpi`:** registra el avance de cada día.
