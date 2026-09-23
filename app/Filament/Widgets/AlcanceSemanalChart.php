@@ -26,11 +26,13 @@ class AlcanceSemanalChart extends ChartWidget
             return false;
         }
 
-        if (! method_exists($user, 'hasAnyRole')) {
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
             return false;
         }
 
-        return $user->hasAnyRole(['super_admin', 'coordinador', 'analista', 'candidato']);
+        return $user->can('widget_AlcanceSemanalChart');
     }
 
     protected function getData(): array

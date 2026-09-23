@@ -29,7 +29,7 @@ class NewMessagesWidget extends BaseWidget
             return false;
         }
 
-        return $user->hasAnyRole(['super_admin', 'coordinador']);
+        return $user->can('widget_NewMessagesWidget');
     }
 
     public function table(Table $table): Table
