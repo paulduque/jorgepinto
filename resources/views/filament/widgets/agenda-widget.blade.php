@@ -182,10 +182,11 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Selecciona otro día en el calendario
                 </p>
-                <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}"
-                    class="mt-4 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700">
-                    + Crear evento
-                </a>
+                @if (auth()->user()?->can('create_event'))
+                    <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}" class="...">
+                        Crear evento
+                    </a>
+                @endif
             </div>
             @endif
         </div>
