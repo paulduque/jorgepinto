@@ -23,7 +23,7 @@
 ### Backend
 
 - **Laravel 11** (PHP 8.2+)
-- **MySQL 8**
+- **MySQL 8** (VPS) / **SQLite** (local)
 - **Filament 3.3** (panel admin)
 - **Laravel Sanctum** (tokens API)
 - **Spatie Laravel Permission** (roles y permisos)
@@ -34,9 +34,10 @@
 ### Frontend
 
 - **Blade templates**
-- **Tailwind CSS** (colores personalizados)
+- **Tailwind CSS v4** (colores personalizados)
 - **Alpine.js**
 - **Vite** (build de assets)
+- **@tailwindcss/typography** (estilos de contenido)
 
 ### Integraciones
 
@@ -305,6 +306,12 @@ Webhook WAHA
 - Abajo: `site_name` (ej: "SITIO OFICIAL") — 2 palabras máximo
 - Protección anti-duplicado: si `site_name == person_name`, forzar fallback
 
+### Open Graph
+
+- Imágenes destacadas: 1.91:1 (1200x630)
+- Tags OG configurados en layout base + home + noticias
+- Imágenes de noticias y eventos redimensionadas automáticamente
+
 ---
 
 ## 💻 CONVENCIONES DE CÓDIGO
@@ -327,32 +334,144 @@ Webhook WAHA
 ```
 sitio/
 ├── app/
-│   ├── Filament/
-│   │   ├── Pages/ (Calendar, Auth/Register)
-│   │   ├── Resources/ (EventResource, NewsResource, MomentResource, SiteSettingResource, UserResource, ContactMessageResource)
-│   │   └── Widgets/ (AgendaWidget, LatestNewsWidget, QuickActionsWidget, CalendarWidget, NewMessagesWidget, SiteStatsOverview)
-│   ├── Http/Controllers/
-│   │   ├── Api/AgendaController.php
-│   │   ├── HomeController.php
-│   │   ├── NewsController.php
-│   │   └── ContactController.php
-│   └── Models/ (Event, News, Moment, SiteSetting, ContactMessage, User)
-├── database/migrations/
+│ ├── Filament/
+│ │ ├── Pages/
+│ │ │ ├── Calendar.php
+│ │ │ └── Auth/Register.php
+│ │ │
+│ │ ├── Resources/
+│ │ │ ├── Frontend/
+│ │ │ │ ├── EventResource.php
+│ │ │ │ ├── NewsResource.php
+│ │ │ │ ├── MomentResource.php
+│ │ │ │ ├── SiteSettingResource.php
+│ │ │ │ ├── UserResource.php
+│ │ │ │ ├── ContactMessageResource.php
+│ │ │ │ ├── HeroResource.php
+│ │ │ │ ├── ThemeResource.php
+│ │ │ │ └── ProfileResource.php
+│ │ │ │
+│ │ │ └── Campaña/
+│ │ │ ├── ZonaResource.php
+│ │ │ ├── SemanaPlanResource.php
+│ │ │ ├── TareaResource.php
+│ │ │ ├── ContactoResource.php
+│ │ │ ├── ValidadorResource.php
+│ │ │ ├── KpiSemanalResource.php
+│ │ │ ├── AvanceKpiResource.php
+│ │ │ ├── EventoCampanaResource.php
+│ │ │ ├── PiezaContenidoResource.php
+│ │ │ ├── IncidenteResource.php
+│ │ │ └── DocumentoCampanaResource.php
+│ │ │
+│ │ └── Widgets/
+│ │ ├── Frontend/
+│ │ │ ├── AgendaWidget.php
+│ │ │ ├── LatestNewsWidget.php
+│ │ │ ├── QuickActionsWidget.php
+│ │ │ ├── CalendarWidget.php
+│ │ │ ├── NewMessagesWidget.php
+│ │ │ ├── SiteStatsOverview.php
+│ │ │ └── WelcomeWidget.php
+│ │ │
+│ │ └── Campaña/
+│ │ ├── KpiOverviewWidget.php
+│ │ ├── AlcanceSemanalChart.php
+│ │ ├── ProgresoFasesChart.php
+│ │ └── DistribucionZonasChart.php
+│ │
+│ ├── Http/Controllers/
+│ │ ├── Api/AgendaController.php
+│ │ ├── HomeController.php
+│ │ ├── NewsController.php
+│ │ └── ContactController.php
+│ │
+│ ├── Models/
+│ │ ├── Frontend/
+│ │ │ ├── Event.php
+│ │ │ ├── News.php
+│ │ │ ├── Moment.php
+│ │ │ ├── SiteSetting.php
+│ │ │ ├── ContactMessage.php
+│ │ │ ├── User.php
+│ │ │ ├── Hero.php
+│ │ │ ├── Theme.php
+│ │ │ └── Profile.php
+│ │ │
+│ │ └── Campaña/
+│ │ ├── Zona.php
+│ │ ├── SemanaPlan.php
+│ │ ├── Tarea.php
+│ │ ├── Contacto.php
+│ │ ├── Validador.php
+│ │ ├── EventoCampana.php
+│ │ ├── PiezaContenido.php
+│ │ ├── KpiSemanal.php
+│ │ ├── AvanceKpi.php
+│ │ ├── Incidente.php
+│ │ └── DocumentoCampana.php
+│ │
+│ ├── Observers/
+│ │ └── AvanceKpiObserver.php
+│ │
+│ └── Policies/ (20 policies generadas por Shield)
+│
+├── database/
+│ ├── migrations/
+│ │ ├── (migraciones del frontend existentes)
+│ │ └── (13 migraciones del módulo Campaña)
+│ │
+│ └── seeders/
+│ ├── Frontend/
+│ │ ├── SiteDataSeeder.php
+│ │ ├── RolesAndPermissionsSeeder.php
+│ │ └── RolePermissionsSeeder.php
+│ │
+│ └── Campaña/
+│ ├── ZonaSeeder.php
+│ ├── SemanaPlanSeeder.php
+│ ├── TareaSeeder.php
+│ ├── KpiSemanalSeeder.php
+│ ├── DocumentoCampanaSeeder.php
+│ └── CampanaRolePermissionsSeeder.php
+│
 ├── resources/
-│   ├── css/app.css
-│   ├── js/app.js
-│   └── views/
-│       ├── layouts/app.blade.php
-│       ├── components/ (header, footer, ...)
-│       ├── home.blade.php
-│       ├── news/
-│       ├── agenda/
-│       └── contact/
+│ ├── css/app.css
+│ ├── js/app.js
+│ │
+│ └── views/
+│ ├── layouts/app.blade.php
+│ ├── components/ (header, footer, ...)
+│ ├── home.blade.php
+│ ├── news/
+│ ├── agenda/
+│ ├── contact/
+│ │
+│ └── filament/
+│ ├── documento-campana.blade.php
+│ └── widgets/
+│ ├── agenda-widget.blade.php
+│ ├── kpi-overview.blade.php
+│ ├── quick-actions.blade.php
+│ └── welcome-widget.blade.php
+│
 ├── routes/
-│   ├── web.php
-│   └── api.php
+│ ├── web.php
+│ └── api.php
+│
+├── ESTRATEGIAS_CAMPANA.md
+├── CHANGELOG_MODULO_CAMPANA.md
+├── PROMPT_MAESTRO_JORGE_PINTO.md
 └── .env
 ```
+
+### Resumen de archivos por módulo
+
+| Módulo       | Resources | Widgets | Models | Seeders |
+| ------------ | :-------: | :-----: | :----: | :-----: |
+| **Frontend** |     9     |    7    |   9    |    3    |
+| **Campaña**  |    11     |    4    |   11   |    6    |
+| **Total**    |  **20**   | **11**  | **20** |  **9**  |
 
 ---
 
@@ -366,22 +485,25 @@ cd /home/jorgepinto.ec/laravel
 git status
 
 # 2. Si hay cambios locales:
-# git stash
+# git restore .
 
 # 3. Traer cambios
 git pull origin main
 
-# 4. Restaurar (si se hizo stash)
-# git stash pop
+# 4. Instalar dependencias (si hay cambios en package.json)
+npm install
 
-# 5. Migraciones (si las hay)
+# 5. Compilar assets (si hay cambios en CSS/JS)
+npm run build
+
+# 6. Migraciones (si las hay)
 php artisan migrate --force
 
-# 6. Limpiar cachés
+# 7. Limpiar cachés
 php artisan optimize:clear
 php artisan filament:cache-components
 
-# 7. Permisos
+# 8. Permisos
 chown -R jorge5217:jorge5217 storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 ```
@@ -475,6 +597,9 @@ Al generar código, cubre estos casos:
 8. No usar `dd()` ni `dump()` en código de producción
 9. Manejar errores con try/catch y devolver respuestas JSON consistentes
 10. Validar siempre la entrada del usuario
+11. Usar `Filament::auth()->user()` en lugar de `auth()->user()` en contextos de Filament
+12. Recargar el modelo User desde la BD (`User::find($user->id)`) antes de usar `->can()` o `->hasRole()`
+13. Los permisos se controlan exclusivamente con Shield (no `canAccess` manual)
 
 ---
 
@@ -512,10 +637,11 @@ Gestionar el avance de la campaña desde el panel administrativo:
 
 ### Estado actual
 
-- **Fase:** 1 (Estructura base)
-- **Rama:** `feature/modulo-campana`
+- **Estado:** ✅ Completado y desplegado en producción
 - **Inicio:** 20 sep 2026
+- **Deploy al VPS:** 21 sep 2026
 - **Changelog:** ver `CHANGELOG_MODULO_CAMPANA.md`
+- **Rama:** fusionada a `main`
 
 ### Arquitectura del módulo
 
@@ -541,6 +667,13 @@ FILAMENT /admin
 │
 └── ⚙️ Configuración (solo super_admin)
 
+### Sistema de avances diarios
+
+- **Tabla `avances_kpi`:** registra el avance de cada día.
+- **Observer `AvanceKpiObserver`:** recalcula automáticamente el valor total del KPI semanal.
+- **Modal inline en `KpiOverviewWidget`:** permite registrar el avance sin salir del dashboard.
+- **Constraint único:** un solo avance por KPI por día.
+
 ### Tablas del módulo (11)
 
 | Tabla               | Propósito                                       |
@@ -556,22 +689,71 @@ FILAMENT /admin
 | `incidentes`        | Ataques, desinformación, crisis                 |
 | `documento_campana` | Versiones del mapa estratégico (markdown)       |
 
+### Tablas del Módulo Campaña (11)
+
+#### `zonas`
+
+`id`, `canton`, `parroquia`, `prioridad` (alta/media/baja), `notas`, `timestamps`
+
+#### `semanas_plan`
+
+`id`, `codigo` (S1-S7, Cierre, Oficial, Silencio), `fecha_inicio`, `fecha_fin`, `fase`, `objetivo`, `estado`, `timestamps`
+
+#### `tareas`
+
+`id`, `titulo`, `descripcion`, `fase`, `semana_id` (FK), `responsable_id` (FK), `fecha_limite`, `estado`, `prioridad`, `orden`, `timestamps`
+
+#### `contactos`
+
+`id`, `nombre`, `telefono`, `email`, `zona_id` (FK), `origen`, `consentimiento`, `capturado_por` (FK), `fecha_consentimiento`, `consentimiento_verbal`, `notas`, `timestamps`
+
+#### `validadores`
+
+`id`, `nombre`, `cargo`, `telefono`, `zona_id` (FK), `estado`, `fecha_apoyo`, `notas`, `timestamps`
+
+#### `eventos_campana`
+
+`id`, `titulo`, `fecha`, `zona_id` (FK), `descripcion`, `contactos_captados`, `piezas_publicadas`, `estado`, `timestamps`
+
+#### `piezas_contenido`
+
+`id`, `fecha`, `formato` (reel/post/story/video/carrusel), `mensaje`, `zona_id` (FK), `estado`, `alcance`, `interacciones`, `url`, `timestamps`
+
+#### `kpis_semanales`
+
+`id`, `semana_id` (FK), `kpi` (contactos/validadores/suscriptores/alcance/eventos), `valor`, `meta`, `notas`, `timestamps`
+**Constraint:** unique (semana_id, kpi)
+
+#### `avances_kpi`
+
+`id`, `kpi_semanal_id` (FK), `fecha`, `valor`, `notas`, `created_by` (FK), `timestamps`
+**Constraint:** unique (kpi_semanal_id, fecha)
+
+#### `incidentes`
+
+`id`, `fecha`, `tipo` (ataque/desinformacion/crisis/otro), `descripcion`, `respuesta`, `estado`, `timestamps`
+
+#### `documento_campana`
+
+`id`, `titulo`, `contenido` (markdown), `version`, `updated_by` (FK), `timestamps`
+
 ### Roles y permisos
 
-| Rol           | Acceso                                                         |
-| ------------- | -------------------------------------------------------------- |
-| `super_admin` | Todo                                                           |
-| `coordinador` | Campaña, contactos, validadores, eventos, piezas, KPIs, tareas |
-| `editor`      | Piezas, eventos (lectura), tareas                              |
-| `analista`    | KPIs y charts (solo lectura)                                   |
-| `candidato`   | Dashboard resumido                                             |
+| Rol           | Permisos | Descripción                                         |
+| ------------- | -------- | --------------------------------------------------- |
+| `super_admin` | 246      | Todo el sistema                                     |
+| `coordinador` | 90       | Campaña completa + frontend (sin Documento Maestro) |
+| `editor`      | 44       | Contenido, tareas, eventos, piezas, avances         |
+| `publicista`  | 15       | Solo piezas de contenido                            |
+| `colaborador` | 20       | Captación (contactos, avances) + lectura            |
 
 ### Fases de implementación
 
-- [ ] **Fase 1** — Estructura base (migraciones, modelos, seeders)
-- [ ] **Fase 2** — Recursos Filament (MVP)
-- [ ] **Fase 3** — Documento + Eventos + Piezas + Incidentes
-- [ ] **Fase 4** — Dashboard + Widgets + Charts + Roles
+- [x] **Fase 1** — Estructura base (11 tablas, 10 modelos, 6 seeders)
+- [x] **Fase 2** — Recursos Filament (11 Resources)
+- [x] **Fase 3** — Documento + Eventos + Piezas + Incidentes
+- [x] **Fase 4** — Dashboard + Widgets + Charts + Roles (Shield)
+- [x] **Fase 5** — Deploy al VPS + Orden del menú
 
 ### Reglas del módulo
 
