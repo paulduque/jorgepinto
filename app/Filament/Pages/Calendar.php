@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Models\Event;
+use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 use Saade\FilamentFullCalendar\Data\EventData;
@@ -30,20 +32,20 @@ class Calendar extends Page
 
     public static function canAccess(): bool
     {
-        $user = \Filament\Facades\Filament::auth()->user();
+        $user = Filament::auth()->user();
 
         if (! $user) {
             return false;
         }
 
         // Recargar el modelo desde la BD para asegurar que tiene HasRoles
-        $user = \App\Models\User::find($user->id);
+        $user = User::find($user->id);
 
         if (! $user) {
             return false;
         }
 
-        return $user->hasAnyRole(['super_admin', 'coordinador']);
+        return $user->can('view_any_event');
     }
 
     public static function shouldRegisterNavigation(): bool

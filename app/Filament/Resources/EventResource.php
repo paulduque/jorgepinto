@@ -48,54 +48,6 @@ class EventResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    public static function canAccess(): bool
-    {
-        $user = \Filament\Facades\Filament::auth()->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        // Recargar el modelo desde la BD
-        $user = User::find($user->id);
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->hasAnyRole(['super_admin', 'coordinador']);
-    }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return static::canAccess();
-    }
-
-    public static function canViewAny(): bool
-    {
-        return static::canAccess();
-    }
-
-    public static function canCreate(): bool
-    {
-        return static::canAccess();
-    }
-
-    public static function canEdit($record): bool
-    {
-        return static::canAccess();
-    }
-
-    public static function canDelete($record): bool
-    {
-        return static::canAccess();
-    }
-
-    public static function canDeleteAny(): bool
-    {
-        return static::canAccess();
-    }
-
     // ─────────────────────────────────────────────────────────
     // FORMULARIO
     // ─────────────────────────────────────────────────────────

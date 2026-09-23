@@ -17,26 +17,24 @@ class CalendarWidget extends FullCalendarWidget
      */
     public static function canView(): bool
     {
-        // 1. Verificar que estamos en la página de calendario
         if (! request()->routeIs('filament.admin.pages.calendar')) {
             return false;
         }
 
-        // 2. Verificar el rol del usuario
         $user = Filament::auth()->user();
 
         if (! $user) {
             return false;
         }
 
-        // Recargar el modelo desde la BD para asegurar que tiene HasRoles
+        // Recargar el modelo desde la BD
         $user = User::find($user->id);
 
         if (! $user) {
             return false;
         }
 
-        return $user->hasAnyRole(['super_admin', 'coordinador']);
+        return $user->can('view_any_event');
     }
 
     public function fetchEvents(array $fetchInfo): array

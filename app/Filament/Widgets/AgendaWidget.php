@@ -79,7 +79,7 @@ class AgendaWidget extends Widget
             return false;
         }
 
-        return $user->hasAnyRole(['super_admin', 'coordinador']);
+        return $user->can('view_any_event');
     }
 
     /**
