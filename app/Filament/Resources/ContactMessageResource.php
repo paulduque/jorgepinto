@@ -57,13 +57,27 @@ class ContactMessageResource extends Resource
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
                             ->disabled()
-                            ->copyable(),
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('copyEmail')
+                                    ->icon('heroicon-o-clipboard')
+                                    ->action(fn() => null)
+                                    ->extraAttributes([
+                                        'x-on:click' => "navigator.clipboard.writeText(\$el.closest('.fi-fo-field-wrp').querySelector('input').value); new FilamentNotification().title('Copiado').success().send()",
+                                    ])
+                            ),
 
                         Forms\Components\TextInput::make('phone')
                             ->label('Teléfono')
                             ->disabled()
-                            ->copyable()
-                            ->placeholder('No proporcionado'),
+                            ->placeholder('No proporcionado')
+                            ->suffixAction(
+                                Forms\Components\Actions\Action::make('copyPhone')
+                                    ->icon('heroicon-o-clipboard')
+                                    ->action(fn() => null)
+                                    ->extraAttributes([
+                                        'x-on:click' => "navigator.clipboard.writeText(\$el.closest('.fi-fo-field-wrp').querySelector('input').value); new FilamentNotification().title('Copiado').success().send()",
+                                    ])
+                            ),
 
                         Forms\Components\TextInput::make('subject')
                             ->label('Asunto')
