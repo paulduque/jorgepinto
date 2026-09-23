@@ -19,7 +19,7 @@ class WelcomeWidget extends Widget
      */
     public static function canView(): bool
     {
-        $user = Filament::auth()->user();
+        $user = \Filament\Facades\Filament::auth()->user();
 
         if (! $user) {
             return false;
@@ -31,7 +31,7 @@ class WelcomeWidget extends Widget
             return false;
         }
 
-        return $user->hasRole('colaborador');
+        return $user->can('widget_WelcomeWidget');
     }
 
     protected function getViewData(): array

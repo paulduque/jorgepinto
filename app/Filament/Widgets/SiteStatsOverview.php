@@ -15,6 +15,23 @@ class SiteStatsOverview extends BaseWidget
 
     protected static ?int $sort = 12;
 
+    public static function canView(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->can('widget_SiteStatsOverview');
+    }
+
     protected function getStats(): array
     {
         $activeHero = Hero::where('is_active', true)->first();

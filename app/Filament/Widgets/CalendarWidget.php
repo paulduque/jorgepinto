@@ -10,31 +10,27 @@ use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    protected static ?int $sort = 15;
+
     /**
      * Solo mostrar el widget si:
-     * 1. Estamos en la página de calendario
-     * 2. El usuario tiene rol super_admin o coordinador
+     * ...
      */
     public static function canView(): bool
     {
-        if (! request()->routeIs('filament.admin.pages.calendar')) {
-            return false;
-        }
-
-        $user = Filament::auth()->user();
+        $user = \Filament\Facades\Filament::auth()->user();
 
         if (! $user) {
             return false;
         }
 
-        // Recargar el modelo desde la BD
-        $user = User::find($user->id);
+        $user = \App\Models\User::find($user->id);
 
         if (! $user) {
             return false;
         }
 
-        return $user->can('view_any_event');
+        return $user->can('widget_CalendarWidget');
     }
 
     public function fetchEvents(array $fetchInfo): array

@@ -79,7 +79,7 @@ class AgendaWidget extends Widget
             return false;
         }
 
-        return $user->can('view_any_event');
+        return $user->can('widget_AgendaWidget');
     }
 
     /**

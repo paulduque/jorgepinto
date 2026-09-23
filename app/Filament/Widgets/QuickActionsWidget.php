@@ -14,4 +14,21 @@ class QuickActionsWidget extends Widget
     protected static ?int $sort = 14;
 
     protected int|string|array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        $user = \Filament\Facades\Filament::auth()->user();
+
+        if (! $user) {
+            return false;
+        }
+
+        $user = \App\Models\User::find($user->id);
+
+        if (! $user) {
+            return false;
+        }
+
+        return $user->can('widget_QuickActionsWidget');
+    }
 }
