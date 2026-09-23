@@ -90,6 +90,10 @@ class CampanaRolePermissionsSeeder extends Seeder
             'widget_AlcanceSemanalChart',
             'widget_ProgresoFasesChart',
             'widget_DistribucionZonasChart',
+            // DocumentoCampana
+            'view_any_documento::campana',
+            'view_documento::campana',
+            'update_documento::campana',
             // Frontend (event, news, hero, etc.)
             'view_any_event',
             'view_event',
@@ -167,6 +171,9 @@ class CampanaRolePermissionsSeeder extends Seeder
             'widget_AlcanceSemanalChart',
             'widget_ProgresoFasesChart',
             'widget_DistribucionZonasChart',
+            // DocumentoCampana (solo lectura)
+            'view_any_documento::campana',
+            'view_documento::campana',
             // Frontend (news, hero, etc.)
             'view_any_news',
             'view_news',

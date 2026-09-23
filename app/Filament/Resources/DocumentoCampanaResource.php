@@ -29,24 +29,6 @@ class DocumentoCampanaResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    // ─────────────────────────────────────────────────────────
-    // ACCESO: solo super_admin
-    // ─────────────────────────────────────────────────────────
-    public static function canAccess(): bool
-    {
-        $user = \Filament\Facades\Filament::auth()->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        if (! method_exists($user, 'hasRole')) {
-            return false;
-        }
-
-        return $user->hasRole('super_admin');
-    }
-
     public static function canCreate(): bool
     {
         return false; // Solo se edita el documento existente
