@@ -31,6 +31,7 @@ use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 
 class EventResource extends Resource
 {
@@ -143,6 +144,9 @@ class EventResource extends Resource
                     ])
                     ->columns(2),
 
+
+
+                // Dentro del schema, reemplaza la Section::make('Ubicación'):
                 Section::make('Ubicación')
                     ->schema([
                         TextInput::make('location')
@@ -153,15 +157,20 @@ class EventResource extends Resource
                             ->label('Dirección')
                             ->maxLength(255),
 
-                        TextInput::make('latitude')
-                            ->label('Latitud')
-                            ->numeric()
-                            ->step(0.0000001),
-
-                        TextInput::make('longitude')
-                            ->label('Longitud')
-                            ->numeric()
-                            ->step(0.0000001),
+                        Map::make('location_map')
+                            ->label('Ubicación en el mapa')
+                            ->columnSpanFull()
+                            ->height(450)
+                            ->defaultLocation([-0.1807, -78.4678])
+                            ->defaultZoom(15)
+                            ->autocomplete('address')
+                            ->autocompleteReverse(true)
+                            ->reverseGeocode([
+                                'address' => '%S %n, %z %L',
+                            ])
+                            ->geolocate()
+                            ->geolocateLabel('Usar mi ubicación')
+                            ->geolocateOnLoad(false),
                     ])
                     ->columns(2),
 

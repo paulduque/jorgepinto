@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\EventResource\Pages;
 
 use App\Filament\Resources\EventResource;
+use Cheesegrits\FilamentGoogleMaps\Infolists\MapEntry;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -15,8 +17,17 @@ class ViewEvent extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('ver_en_google_maps')
+                ->label('Ver en Google Maps')
+                ->icon('heroicon-o-map-pin')
+                ->color('success')
+                ->url(fn() => "https://www.google.com/maps/search/?api=1&query={$this->record->latitude},{$this->record->longitude}")
+                ->openUrlInNewTab()
+                ->visible(fn() => $this->record->latitude && $this->record->longitude),
+
             Actions\EditAction::make()
                 ->label('Editar evento'),
+
             Actions\DeleteAction::make()
                 ->label('Eliminar'),
         ];
@@ -113,13 +124,13 @@ class ViewEvent extends ViewRecord
                             ->label('Dirección')
                             ->placeholder('Sin dirección'),
 
-                        Infolists\Components\TextEntry::make('latitude')
-                            ->label('Latitud')
-                            ->placeholder('—'),
-
-                        Infolists\Components\TextEntry::make('longitude')
-                            ->label('Longitud')
-                            ->placeholder('—'),
+                        // Mini mapa con la ubicación del evento
+                        MapEntry::make('location_map')
+                            ->label('')
+                            ->height(300)
+                            ->defaultZoom(15)
+                            ->columnSpanFull()
+                            ->visible(fn($record) => $record->latitude && $record->longitude),
                     ])
                     ->columns(2)
                     ->visible(fn($record) => $record->location || $record->address || $record->latitude),

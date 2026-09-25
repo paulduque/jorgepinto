@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Google Maps package - assets generados
+/public/js/cheesegrits/

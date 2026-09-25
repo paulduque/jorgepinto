@@ -99,97 +99,106 @@
                                 $url = \App\Filament\Resources\EventResource::getUrl('view', ['record' => $event]);
                             @endphp
 
-                            @if ($url)
-                                <a href="{{ $url }}"
-                                    class="group block rounded-lg border border-gray-200 bg-white p-4 transition hover:border-primary-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600">
-                                @else
+                            <div
+                                @if ($url) onclick="if (!event.target.closest('.js-maps-link')) { window.location.href = '{{ $url }}'; }"
+                                    class="group relative block cursor-pointer rounded-lg border border-gray-200 bg-white p-4 transition hover:border-primary-300 hover:shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-600" @else
+                                    class="group relative block rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" @endif>
+
+                                <div class="flex items-start gap-4">
                                     <div
-                                        class="group relative block rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-                            @endif
-
-                            <div class="flex items-start gap-4">
-                                <div
-                                    class="flex flex-col items-center rounded-lg bg-primary-50 px-3 py-2 dark:bg-primary-900/30">
-                                    <span class="text-lg font-bold text-primary-700 dark:text-primary-300">
-                                        {{ $event->start_at->format('H:i') }}
-                                    </span>
-                                    @if ($event->end_at)
-                                        <span class="text-[10px] font-medium text-primary-600 dark:text-primary-400">
-                                            {{ $event->end_at->format('H:i') }}
+                                        class="flex flex-col items-center rounded-lg bg-primary-50 px-3 py-2 dark:bg-primary-900/30">
+                                        <span class="text-lg font-bold text-primary-700 dark:text-primary-300">
+                                            {{ $event->start_at->format('H:i') }}
                                         </span>
-                                    @endif
-                                </div>
-
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex items-start justify-between gap-2">
-                                        <h4
-                                            class="font-semibold text-gray-900 group-hover:text-primary-600 dark:text-white">
-                                            {{ $event->title }}
-                                        </h4>
-                                        <span
-                                            class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase
-                                                @switch($event->status)
-                                                    @case('planificado') bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 @break
-                                                    @case('en_curso') bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300 @break
-                                                    @case('completado') bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 @break
-                                                    @case('cancelado') bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 @break
-                                                @endswitch">
-                                            {{ $event->status_label }}
-                                        </span>
+                                        @if ($event->end_at)
+                                            <span
+                                                class="text-[10px] font-medium text-primary-600 dark:text-primary-400">
+                                                {{ $event->end_at->format('H:i') }}
+                                            </span>
+                                        @endif
                                     </div>
 
-                                    @if ($event->description)
-                                        <p class="mt-1 line-clamp-1 text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $event->description }}
-                                        </p>
-                                    @endif
-
-                                    <div
-                                        class="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                                        @if ($event->location)
-                                            <span class="flex items-center gap-1">
-                                                📍 {{ $event->location }}
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-start justify-between gap-2">
+                                            <h4
+                                                class="font-semibold text-gray-900 group-hover:text-primary-600 dark:text-white">
+                                                {{ $event->title }}
+                                            </h4>
+                                            <span
+                                                class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase
+                                                    @switch($event->status)
+                                                        @case('planificado') bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 @break
+                                                        @case('en_curso') bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300 @break
+                                                        @case('completado') bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 @break
+                                                        @case('cancelado') bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300 @break
+                                                    @endswitch">
+                                                {{ $event->status_label }}
                                             </span>
+                                        </div>
+
+                                        @if ($event->description)
+                                            <p class="mt-1 line-clamp-1 text-sm text-gray-500 dark:text-gray-400">
+                                                {{ $event->description }}
+                                            </p>
                                         @endif
 
-                                        @if ($event->assignedUsers->isNotEmpty())
-                                            <span class="flex items-center gap-1">
-                                                👥 {{ $event->assignedUsers->pluck('name')->join(', ') }}
-                                            </span>
-                                        @endif
+                                        <div
+                                            class="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                                            @if ($event->location)
+                                                <span class="flex items-center gap-1">
+                                                    📍 {{ $event->location }}
+                                                </span>
+                                            @endif
 
-                                        <span class="rounded bg-gray-100 px-2 py-0.5 font-medium dark:bg-gray-700">
-                                            {{ $event->type_label }}
-                                        </span>
+                                            @if ($event->assignedUsers->isNotEmpty())
+                                                <span class="flex items-center gap-1">
+                                                    👥 {{ $event->assignedUsers->pluck('name')->join(', ') }}
+                                                </span>
+                                            @endif
+
+                                            <span class="rounded bg-gray-100 px-2 py-0.5 font-medium dark:bg-gray-700">
+                                                {{ $event->type_label }}
+                                            </span>
+
+                                            @if ($event->latitude && $event->longitude)
+                                                <a href="https://www.google.com/maps/search/?api=1&query={{ $event->latitude }},{{ $event->longitude }}"
+                                                    target="_blank" rel="noopener noreferrer"
+                                                    class="js-maps-link inline-flex items-center gap-1 font-medium text-gray-500 transition hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                                    title="Ver en Google Maps">
+                                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                    Ver en mapa
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            @if ($url)
-                                </a>
-                            @else
+                        @endforeach
+                    </div>
+                @else
+                    <div
+                        class="flex h-full min-h-[200px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 p-8 text-center dark:border-gray-700">
+                        <div class="text-4xl">📭</div>
+                        <p class="mt-3 font-semibold text-gray-700 dark:text-gray-300">
+                            No hay eventos para este día
+                        </p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            Selecciona otro día en el calendario
+                        </p>
+                        @if (auth()->user()?->can('create_event'))
+                            <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}" class="...">
+                                Crear evento
+                            </a>
+                        @endif
                     </div>
                 @endif
-                @endforeach
             </div>
-        @else
-            <div
-                class="flex h-full min-h-[200px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 p-8 text-center dark:border-gray-700">
-                <div class="text-4xl">📭</div>
-                <p class="mt-3 font-semibold text-gray-700 dark:text-gray-300">
-                    No hay eventos para este día
-                </p>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Selecciona otro día en el calendario
-                </p>
-                @if (auth()->user()?->can('create_event'))
-                    <a href="{{ \App\Filament\Resources\EventResource::getUrl('create') }}" class="...">
-                        Crear evento
-                    </a>
-                @endif
-            </div>
-            @endif
-        </div>
         </div>
     </x-filament::section>
 </x-filament-widgets::widget>

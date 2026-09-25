@@ -30,6 +30,7 @@
 - **Spatie Laravel Sluggable** (slugs automáticos)
 - **BezhanSalleh Filament Shield** (permisos en Filament)
 - **Saade Filament FullCalendar** (calendario)
+- **Cheesegrits Filament Google Maps** (mapa interactivo con Places API)
 
 ### Frontend
 
@@ -329,9 +330,106 @@ Webhook WAHA
 
 ---
 
+## 🗺️ MAPA INTERACTIVO (GOOGLE MAPS)
+
+### Paquete
+
+- **`cheesegrits/filament-google-maps`** v4.x
+- Config publicado: `config/filament-google-maps.php`
+- API Key: variable `GOOGLE_MAPS_API_KEY` en `.env`
+
+### APIs de Google Cloud requeridas
+
+- **Maps JavaScript API** (mapa en el navegador)
+- **Places API** (autocompletado de direcciones)
+- **Geocoding API** (reverse geocoding)
+
+**Importante:** la cuenta de Google Cloud debe tener **Billing habilitado** (aunque se use la capa gratuita de $200 USD/mes). Sin Billing, el mapa no carga y muestra `BillingNotEnabledMapError`.
+
+### Modelo `Event`
+
+El modelo tiene un **atributo computado** llamado `location_map` (NO `location`, para evitar conflicto con la columna física `location` de la tabla `events`, que guarda el nombre del lugar):
+
+- `$appends = ['location_map']`
+- `$fillable` incluye `'location_map'`
+- Métodos: `getLocationMapAttribute()`, `setLocationMapAttribute()`, `getLatLngAttributes()`, `getComputedLocation()`
+
+### Convenciones del paquete
+
+| Elemento           | Método correcto                   | Método incorrecto      |
+| ------------------ | --------------------------------- | ---------------------- |
+| Zoom               | `->defaultZoom(15)`               | ~~`->zoom(15)`~~       |
+| Ubicación inicial  | `->defaultLocation([lat, lng])`   | —                      |
+| Altura             | `->height(300)`                   | —                      |
+| Autocomplete       | `->autocomplete('address')`       | —                      |
+| Actualizar lat/lng | automático con atributo computado | ~~`->updateLatLng()`~~ |
+
+### Formulario (`EventResource`)
+
+```php
+Map::make('location_map')
+    ->label('Ubicación en el mapa')
+    ->columnSpanFull()
+    ->height(450)
+    ->defaultLocation([-0.1807, -78.4678]) // Quito
+    ->defaultZoom(12)
+    ->autocomplete('address')
+    ->autocompleteReverse(true)
+    ->reverseGeocode([
+        'address' => '%S %n, %z %L',
+    ])
+    ->geolocate()
+    ->geolocateOnLoad(false),
+```
+
+### Vista de detalle (`ViewEvent`)
+
+```php
+MapEntry::make('location_map')
+    ->height(300)
+    ->defaultZoom(15)
+    ->columnSpanFull()
+    ->visible(fn($record) => $record->latitude && $record->longitude),
+```
+
+Más un `Action` "Ver en Google Maps" en la cabecera.
+
+### Widget Agenda
+
+Botón "Ver en mapa" con `<button>`, no `<a>` (HTML5 no permite anidar `<a>` dentro de `<a>`).
+
+### Regla del autoload en Windows
+
+Ejecutar `composer dump-autoload --optimize` después de instalar paquetes nuevos.
+
+### Assets del paquete
+
+Los JS del paquete se publican en `public/js/cheesegrits/`. **No se versionan**. En cada deploy al VPS:
+
+```bash
+php artisan filament:assets
+```
+
+### Deploy al VPS
+
+```bash
+composer install --no-dev --optimize-autoloader
+composer dump-autoload --optimize
+php artisan filament:assets
+php artisan optimize:clear
+php artisan filament:cache-components
+chown -R jorge5217:jorge5217 storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+
+Agregar `https://jorgepinto.ec/*` a las restricciones de la API Key en Google Cloud Console.
+
+---
+
 ## 📁 ESTRUCTURA DE ARCHIVOS
 
 ```
+
 sitio/
 ├── app/
 │ ├── Filament/
@@ -463,6 +561,7 @@ sitio/
 ├── CHANGELOG_MODULO_CAMPANA.md
 ├── PROMPT_MAESTRO_JORGE_PINTO.md
 └── .env
+
 ```
 
 ### Resumen de archivos por módulo

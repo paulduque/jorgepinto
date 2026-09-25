@@ -205,6 +205,59 @@ Se actualiza al final de cada sesion de trabajo.
 
 ---
 
+### Sesión 24 sep 2026 - Mapa interactivo en eventos
+
+**Objetivo:** reemplazar los campos `latitude` y `longitude` por un mapa interactivo con búsqueda de Google Places, en el formulario de eventos.
+
+#### Paquete instalado
+
+- OK `cheesegrits/filament-google-maps` v4.0.2 (compatible con Filament 3.3)
+- OK API Key de Google Maps configurada en `.env` (`GOOGLE_MAPS_API_KEY`)
+- OK 3 APIs habilitadas en Google Cloud Console: Maps JavaScript, Places, Geocoding
+- OK Facturación (Billing) habilitada en Google Cloud (con capa gratuita de $200 USD/mes)
+
+#### Problemas resueltos en el camino
+
+- OK **Método `->zoom()` no existe** → se usa `->defaultZoom()` (tanto en `Map` como en `MapEntry`)
+- OK **Método `->updateLatLng()` no existe** en v4.0.2 → se eliminó
+- OK **Conflicto de nombres con la columna `location`** → el paquete espera un atributo computado, pero la tabla `events` ya tiene una columna `location` para el nombre del lugar. Solución: renombrar el atributo computado a `location_map`
+- OK **Composer autoload en Windows** no encontraba la clase `FilamentGoogleMapsServiceProvider` → se solucionó con `composer dump-autoload --optimize`
+- OK **`location_map` faltaba en `$fillable`** del modelo `Event` → se agregó para que el mutador se ejecute
+- OK **Referer de Google Maps** rechazaba `127.0.0.1:8000` → se agregó a las restricciones de la API Key
+- OK **Billing no habilitado** en Google Cloud → se habilitó (capa gratuita)
+
+#### Archivos modificados
+
+- OK `app/Filament/Resources/EventResource.php`
+    - Reemplazados `TextInput('latitude')` y `TextInput('longitude')` por `Map::make('location_map')` con autocompletado
+- OK `app/Filament/Resources/EventResource/Pages/ViewEvent.php`
+    - Agregado `Action` "Ver en Google Maps" en la cabecera
+    - Agregado `MapEntry` con mini mapa (300px, zoom 15) en la sección Ubicación
+- OK `app/Models/Event.php`
+    - Agregado `'location_map'` a `$appends` y `$fillable`
+    - Agregados 4 métodos: `getLocationMapAttribute`, `setLocationMapAttribute`, `getLatLngAttributes`, `getComputedLocation`
+- OK `resources/views/filament/widgets/agenda-widget.blade.php`
+    - Agregado botón "Ver en mapa" (con `<button>` para evitar anidamiento inválido de `<a>`) en la metadata de cada evento
+- OK `bootstrap/providers.php`
+    - Registrado manualmente `Cheesegrits\FilamentGoogleMaps\FilamentGoogleMapsServiceProvider` (solución al autoload de Windows)
+- OK `config/services.php`
+    - Configuración de la API Key de Google Maps
+- OK `composer.json` / `composer.lock`
+    - Agregado `cheesegrits/filament-google-maps: ^4.0`
+- OK `config/filament-google-maps.php` (nuevo)
+    - Config publicada del paquete
+- OK `.gitignore`
+    - Excluido `/public/js/cheesegrits/` (assets generados por el paquete)
+
+#### Decisiones importantes
+
+- **`location_map` en lugar de `location`** como nombre del atributo computado, para evitar conflicto con la columna física `location` de la tabla `events` (que guarda el nombre del lugar).
+- **`<button>` en lugar de `<a>`** para el botón "Ver en mapa" en la vista Blade del widget, porque HTML5 no permite anidar `<a>` dentro de `<a>`.
+- **No versionar** los assets generados del paquete (`public/js/cheesegrits/`). Se regeneran en el VPS con `php artisan filament:assets`.
+- **Deploy al VPS requiere** ejecutar `composer install --no-dev --optimize-autoloader` + `composer dump-autoload --optimize` + `php artisan filament:assets`.
+
+---
+
 ## Resumen de la Fase 1
 
 | Componente       | Cantidad |
@@ -221,22 +274,28 @@ Se actualiza al final de cada sesion de trabajo.
 
 ## Registro de decisiones
 
-| Fecha       | Decision                                                                   | Motivo                                                 |
-| ----------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
-| 20 sep 2026 | Implementar modulo Campana como herramienta viva                           | Mejor que un .md estatico                              |
-| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                                   | Mantener `main` limpio                                 |
-| 20 sep 2026 | Desarrollo maximo 8h/semana                                                | Prioridad 1: campana                                   |
-| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events                       | Ya existe la columna, sin migracion extra              |
-| 20 sep 2026 | Constraint unico (semana_id, kpi)                                          | Evita duplicados accidentales                          |
-| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente                         | Evita descuadres por edicion manual                    |
-| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo           |
-| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14)            | Priorizar el modulo de campana en el dashboard         |
-| 20 sep 2026 | Roles definidos: super_admin, coordinador, editor, publicista, colaborador | Adaptado a los roles reales del equipo                 |
-| 20 sep 2026 | Permisos via Shield + Policies (no canAccess manual)                       | Arquitectura escalable y mantenible                    |
-| 20 sep 2026 | WelcomeWidget solo para colaboradores                                      | La imagen es para trabajo de campo                     |
-| 20 sep 2026 | Resources ordenados por jerarquia (estrategico > operativo > datos)        | Coherencia con los widgets del dashboard               |
-| 23 sep 2026 | Eliminar `canAccess()` hardcodeado del Documento Maestro                   | Permitir acceso a más roles vía Shield                 |
-| 23 sep 2026 | Asignar permisos del Documento Maestro manualmente en el VPS               | Evitar que `syncPermissions` sobrescriba config manual |
-| 23 sep 2026 | Seeder actualizado en repo, pero NO ejecutado en VPS                       | Documentar sin romper la configuración en producción   |
-| 23 sep 2026 | `coordinador` con `view + view_any + update` del Documento Maestro         | Puede leer y editar el documento estratégico           |
-| 23 sep 2026 | `editor` con `view + view_any` del Documento Maestro                       | Solo lectura del documento estratégico                 |
+| Fecha       | Decision                                                                   | Motivo                                                            |
+| ----------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 20 sep 2026 | Implementar modulo Campana como herramienta viva                           | Mejor que un .md estatico                                         |
+| 20 sep 2026 | Avanzar en rama `feature/modulo-campana`                                   | Mantener `main` limpio                                            |
+| 20 sep 2026 | Desarrollo maximo 8h/semana                                                | Prioridad 1: campana                                              |
+| 20 sep 2026 | Guardar notas de WhatsApp en `description` de events                       | Ya existe la columna, sin migracion extra                         |
+| 20 sep 2026 | Constraint unico (semana_id, kpi)                                          | Evita duplicados accidentales                                     |
+| 20 sep 2026 | Meta semanal fija, valor calculado automaticamente                         | Evita descuadres por edicion manual                               |
+| 20 sep 2026 | Avances diarios con modal inline en el dashboard                           | Mejor UX que redirigir a un Resource externo                      |
+| 20 sep 2026 | Widgets de Campana primero (sort 2-5), frontend despues (10-14)            | Priorizar el modulo de campana en el dashboard                    |
+| 20 sep 2026 | Roles definidos: super_admin, coordinador, editor, publicista, colaborador | Adaptado a los roles reales del equipo                            |
+| 20 sep 2026 | Permisos via Shield + Policies (no canAccess manual)                       | Arquitectura escalable y mantenible                               |
+| 20 sep 2026 | WelcomeWidget solo para colaboradores                                      | La imagen es para trabajo de campo                                |
+| 20 sep 2026 | Resources ordenados por jerarquia (estrategico > operativo > datos)        | Coherencia con los widgets del dashboard                          |
+| 23 sep 2026 | Eliminar `canAccess()` hardcodeado del Documento Maestro                   | Permitir acceso a más roles vía Shield                            |
+| 23 sep 2026 | Asignar permisos del Documento Maestro manualmente en el VPS               | Evitar que `syncPermissions` sobrescriba config manual            |
+| 23 sep 2026 | Seeder actualizado en repo, pero NO ejecutado en VPS                       | Documentar sin romper la configuración en producción              |
+| 23 sep 2026 | `coordinador` con `view + view_any + update` del Documento Maestro         | Puede leer y editar el documento estratégico                      |
+| 23 sep 2026 | `editor` con `view + view_any` del Documento Maestro                       | Solo lectura del documento estratégico                            |
+| 24 sep 2026 | Instalar `cheesegrits/filament-google-maps` para el mapa interactivo       | Búsqueda de Google Places + compatible con Filament 3.3           |
+| 24 sep 2026 | Usar `location_map` como atributo computado en lugar de `location`         | Evitar conflicto con la columna `location` de la tabla `events`   |
+| 24 sep 2026 | Registrar manualmente `FilamentGoogleMapsServiceProvider`                  | El autoload de Composer fallaba en Windows con rutas con espacios |
+| 24 sep 2026 | Usar `<button>` en lugar de `<a>` para el botón "Ver en mapa"              | HTML5 no permite anidar `<a>` dentro de `<a>`                     |
+| 24 sep 2026 | Habilitar Billing en Google Cloud                                          | Requisito de Google Maps API (aunque haya capa gratuita)          |
+| 24 sep 2026 | No versionar los assets generados del paquete (`public/js/cheesegrits/`)   | Se regeneran con `php artisan filament:assets` en cada deploy     |
