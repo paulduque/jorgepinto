@@ -2,6 +2,14 @@
 
 @section('title', 'Temas | Jorge Pinto')
 
+@section('meta_description', 'Conoce los temas y propuestas de Jorge Pinto para construir una mejor Pichincha.')
+@section('meta_keywords', 'temas, propuestas, Jorge Pinto, Pichincha, campaña')
+
+@section('og_type', 'website')
+@section('og_title', 'Temas y Propuestas | Jorge Pinto')
+@section('og_description', 'Conoce los temas y propuestas de Jorge Pinto para construir una mejor Pichincha.')
+@section('og_image', $settings?->welcome_image ? asset('storage/' . $settings->welcome_image) : asset('favicon.png'))
+
 @section('content')
 
     <section class="bg-slate-950 text-white">

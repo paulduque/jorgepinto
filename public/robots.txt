@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Áreas administrativas (no indexar)
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /buscar
+
+# Sitemap
+Sitemap: https://jorgepinto.ec/sitemap.xml

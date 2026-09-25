@@ -1,6 +1,47 @@
+@php
+    $extraSchema = [
+        [
+            '@type' => 'NewsArticle',
+            '@id' => url()->current() . '/#article',
+            'headline' => $news->title,
+            'description' => $news->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($news->content), 155),
+            'url' => url()->current(),
+            'datePublished' => $news->published_at?->toAtomString(),
+            'dateModified' => $news->updated_at?->toAtomString(),
+            'author' => [
+                '@id' => config('app.url') . '/#person',
+            ],
+            'publisher' => [
+                '@id' => config('app.url') . '/#person',
+            ],
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => url()->current(),
+            ],
+            'inLanguage' => 'es-EC',
+        ],
+    ];
+
+    if ($news->image) {
+        $extraSchema[0]['image'] = asset('storage/' . $news->image);
+    }
+
+    if ($news->category) {
+        $extraSchema[0]['articleSection'] = $news->category;
+    }
+@endphp
+
+@extends('layouts.app')
 @extends('layouts.app')
 
 @section('title', $news->title . ' | Jorge Pinto')
+
+@section('meta_description', $news->excerpt ?? \Illuminate\Support\Str::limit(strip_tags($news->content), 155))
+@section('meta_keywords',
+    $news->category
+    ? $news->category . ', noticias, Jorge Pinto, Pichincha'
+    : 'noticias, Jorge
+    Pinto, Pichincha')
 
 @section('og_type', 'article')
 @section('og_title', $news->title)

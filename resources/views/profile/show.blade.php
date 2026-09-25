@@ -1,6 +1,43 @@
+@php
+    $profileSchema = [
+        '@type' => 'Person',
+        '@id' => config('app.url') . '/#person',
+        'name' => $profile->name,
+        'url' => url()->current(),
+        'description' => $profile->bio ?? 'Perfil de Jorge Pinto',
+    ];
+
+    if ($profile->image) {
+        $profileSchema['image'] = asset('storage/' . $profile->image);
+    }
+
+    if ($profile->position) {
+        $profileSchema['jobTitle'] = $profile->position;
+    }
+
+    $extraSchema = [$profileSchema];
+@endphp
+
+@extends('layouts.app')
 @extends('layouts.app')
 
 @section('title', $profile->name . ' | Jorge Pinto')
+
+@section('meta_description',
+    'Conoce a Jorge Pinto, ' .
+    ($profile->position ?? 'candidato') .
+    '. Su trayectoria, visión
+    y compromiso con Pichincha.')
+@section('meta_keywords', 'Jorge Pinto, biografía, perfil, candidato, Pichincha')
+
+@section('og_type', 'profile')
+@section('og_title', $profile->name . ' | Jorge Pinto')
+@section('og_description',
+    'Conoce a Jorge Pinto, ' .
+    ($profile->position ?? 'candidato') .
+    '. Su trayectoria, visión y
+    compromiso con Pichincha.')
+@section('og_image', $profile->image ? asset('storage/' . $profile->image) : asset('favicon.png'))
 
 @section('content')
 

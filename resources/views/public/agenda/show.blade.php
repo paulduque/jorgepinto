@@ -1,6 +1,69 @@
+@php
+    $eventSchema = [
+        '@type' => 'Event',
+        '@id' => url()->current() . '/#event',
+        'name' => $event->title,
+        'description' => $event->description ?? 'Evento de campaña de Jorge Pinto',
+        'url' => url()->current(),
+        'startDate' => $event->start_at?->toAtomString(),
+        'eventStatus' => 'https://schema.org/EventScheduled',
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'organizer' => [
+            '@id' => config('app.url') . '/#person',
+        ],
+        'inLanguage' => 'es-EC',
+    ];
+
+    if ($event->end_at) {
+        $eventSchema['endDate'] = $event->end_at->toAtomString();
+    }
+
+    if ($event->image) {
+        $eventSchema['image'] = asset('storage/' . $event->image);
+    }
+
+    if ($event->location || $event->address) {
+        $eventSchema['location'] = [
+            '@type' => 'Place',
+            'name' => $event->location ?? 'Ubicación del evento',
+        ];
+
+        if ($event->address) {
+            $eventSchema['location']['address'] = [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $event->address,
+                'addressLocality' => 'Quito',
+                'addressRegion' => 'Pichincha',
+                'addressCountry' => 'EC',
+            ];
+        }
+
+        if ($event->latitude && $event->longitude) {
+            $eventSchema['location']['geo'] = [
+                '@type' => 'GeoCoordinates',
+                'latitude' => (string) $event->latitude,
+                'longitude' => (string) $event->longitude,
+            ];
+        }
+    }
+
+    $extraSchema = [$eventSchema];
+@endphp
+
+@extends('layouts.app')
 @extends('layouts.app')
 
 @section('title', $event->title . ' - Agenda - Jorge Pinto')
+
+@section('meta_description', $event->description ? \Illuminate\Support\Str::limit(strip_tags($event->description), 155)
+    : 'Evento de campaña de Jorge Pinto: ' . $event->title)
+@section('meta_keywords', $event->title . ', agenda, Jorge Pinto, campaña, ' . ($event->location ?? 'Pichincha'))
+
+@section('og_type', 'article')
+@section('og_title', $event->title)
+@section('og_description', $event->description ? \Illuminate\Support\Str::limit(strip_tags($event->description), 155) :
+    'Evento de campaña de Jorge Pinto')
+@section('og_image', $event->image ? asset('storage/' . $event->image) : asset('favicon.png'))
 
 @section('content')
 

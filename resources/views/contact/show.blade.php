@@ -1,6 +1,57 @@
+@php
+    $settings = \App\Models\SiteSetting::current();
+
+    $contactSchema = [
+        '@type' => 'ContactPage',
+        '@id' => url()->current() . '/#contact',
+        'url' => url()->current(),
+        'name' => 'Contacto | Jorge Pinto',
+        'description' => 'Ponte en contacto con el equipo de campaña de Jorge Pinto.',
+        'inLanguage' => 'es-EC',
+        'mainEntity' => [
+            '@type' => 'Organization',
+            'name' => 'Campaña ' . ($settings?->person_name ?? 'Jorge Pinto'),
+            'url' => config('app.url'),
+        ],
+    ];
+
+    if ($settings?->email || $settings?->phone) {
+        $contactPoint = [
+            '@type' => 'ContactPoint',
+            'contactType' => 'Customer Service',
+            'availableLanguage' => ['Spanish'],
+        ];
+
+        if ($settings?->email) {
+            $contactPoint['email'] = $settings->email;
+        }
+
+        if ($settings?->phone) {
+            $contactPoint['telephone'] = $settings->phone;
+        }
+
+        $contactSchema['mainEntity']['contactPoint'] = $contactPoint;
+    }
+
+    $extraSchema = [$contactSchema];
+@endphp
+
+@extends('layouts.app')
 @extends('layouts.app')
 
 @section('title', 'Contacto | Jorge Pinto')
+
+@section('meta_description',
+    'Ponte en contacto con el equipo de campaña de Jorge Pinto. Escríbenos para consultas,
+    sugerencias o para sumarte al cambio por Pichincha.')
+@section('meta_keywords', 'contacto, Jorge Pinto, campaña, Pichincha, formulario')
+
+@section('og_type', 'website')
+@section('og_title', 'Contacto | Jorge Pinto')
+@section('og_description',
+    'Ponte en contacto con el equipo de campaña de Jorge Pinto. Escríbenos para consultas,
+    sugerencias o para sumarte al cambio por Pichincha.')
+@section('og_image', $settings?->welcome_image ? asset('storage/' . $settings->welcome_image) : asset('favicon.png'))
 
 @section('content')
 

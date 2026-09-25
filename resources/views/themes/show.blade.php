@@ -2,6 +2,16 @@
 
 @section('title', $theme->title . ' | Jorge Pinto')
 
+@section('meta_description', $theme->description ?? \Illuminate\Support\Str::limit(strip_tags($theme->full_description),
+    155))
+@section('meta_keywords', $theme->title . ', propuestas, Jorge Pinto, Pichincha')
+
+@section('og_type', 'article')
+@section('og_title', $theme->title)
+@section('og_description', $theme->description ?? \Illuminate\Support\Str::limit(strip_tags($theme->full_description),
+    155))
+@section('og_image', $theme->image ? asset('storage/' . $theme->image) : asset('favicon.png'))
+
 @section('content')
 
     {{-- Hero del tema --}}

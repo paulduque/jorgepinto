@@ -426,6 +426,56 @@ Agregar `https://jorgepinto.ec/*` a las restricciones de la API Key en Google Cl
 
 ---
 
+## 🔍 SEO TÉCNICO
+
+### Meta tags por página
+
+Todas las vistas públicas usan `@section()` para sobrescribir los meta tags del layout:
+
+| Sección                               | Uso                                     |
+| ------------------------------------- | --------------------------------------- |
+| `@section('title', '...')`            | `<title>` de la página                  |
+| `@section('meta_description', '...')` | `<meta name="description">`             |
+| `@section('meta_keywords', '...')`    | `<meta name="keywords">`                |
+| `@section('canonical', '...')`        | `<link rel="canonical">`                |
+| `@section('og_type', '...')`          | `og:type` (website / article / profile) |
+| `@section('og_title', '...')`         | `og:title`                              |
+| `@section('og_description', '...')`   | `og:description`                        |
+| `@section('og_image', '...')`         | `og:image` (1200x630 ideal)             |
+
+### JSON-LD Schema
+
+`resources/views/partials/seo-schema.blade.php` genera los schemas base:
+
+- `Person` (Jorge Pinto) — siempre presente
+- `WebSite` — siempre presente
+
+Cada vista puede **inyectar schemas adicionales** con `$extraSchema` antes del `@extends`:
+
+| Vista                          | Schema extra  |
+| ------------------------------ | ------------- |
+| `news/show.blade.php`          | `NewsArticle` |
+| `public/agenda/show.blade.php` | `Event`       |
+| `contact/show.blade.php`       | `ContactPage` |
+
+**Ejemplo:**
+
+```blade
+@php
+    $extraSchema = [
+        [
+            '@type' => 'NewsArticle',
+            'headline' => $news->title,
+            // ...
+        ],
+    ];
+@endphp
+
+@extends('layouts.app')
+```
+
+---
+
 ## 📁 ESTRUCTURA DE ARCHIVOS
 
 ```

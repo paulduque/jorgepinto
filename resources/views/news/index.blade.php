@@ -2,6 +2,16 @@
 
 @section('title', 'Noticias | Jorge Pinto')
 
+@section('meta_description', 'Todas las noticias y novedades de la campaña de Jorge Pinto para la Prefectura de
+    Pichincha.')
+@section('meta_keywords', 'noticias Jorge Pinto, campaña Pichincha, novedades, prensa')
+
+@section('og_type', 'website')
+@section('og_title', 'Noticias | Jorge Pinto')
+@section('og_description', 'Todas las noticias y novedades de la campaña de Jorge Pinto para la Prefectura de
+    Pichincha.')
+@section('og_image', $settings?->welcome_image ? asset('storage/' . $settings->welcome_image) : asset('favicon.png'))
+
 @section('content')
 
     {{-- Encabezado --}}

@@ -6,6 +6,7 @@ use App\Models\SiteSetting;
 use App\Models\Theme;
 use App\Models\Profile;
 use App\Http\Controllers\PublicAgendaController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
@@ -141,3 +142,6 @@ Route::middleware(['agenda.access'])->group(function () {
 // Google OAuth
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('auth.google.callback');
+
+// Sitemap XML
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');

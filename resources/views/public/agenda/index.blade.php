@@ -2,6 +2,16 @@
 
 @section('title', 'Agenda - Jorge Pinto')
 
+@section('meta_description', 'Consulta la agenda pública de Jorge Pinto: mítines, reuniones, entrevistas y eventos de
+    campaña en Pichincha.')
+@section('meta_keywords', 'agenda, eventos, Jorge Pinto, campaña, Pichincha, mítines')
+
+@section('og_type', 'website')
+@section('og_title', 'Agenda de campaña | Jorge Pinto')
+@section('og_description', 'Consulta la agenda pública de Jorge Pinto: mítines, reuniones, entrevistas y eventos de
+    campaña en Pichincha.')
+@section('og_image', $settings?->agenda_image ? asset('storage/' . $settings->agenda_image) : asset('favicon.png'))
+
 @section('content')
 
     {{-- Hero de la agenda --}}

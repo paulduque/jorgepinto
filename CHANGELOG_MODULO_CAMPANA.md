@@ -258,6 +258,45 @@ Se actualiza al final de cada sesion de trabajo.
 
 ---
 
+### Sesión 25 sep 2026 - SEO técnico
+
+**Objetivo:** implementar SEO técnico completo (meta tags, Open Graph, JSON-LD, sitemap, robots.txt).
+
+#### Implementado
+
+- OK **Meta tags dinámicos por página** (title, description, keywords, canonical)
+- OK **Open Graph + Twitter Cards** en las 9 vistas públicas
+- OK **JSON-LD Schema** con `partials/seo-schema.blade.php`:
+    - `Person` (Jorge Pinto)
+    - `WebSite`
+    - `NewsArticle` (en noticias individuales)
+    - `Event` (en eventos individuales)
+    - `ContactPage` (en contacto)
+- OK **Sitemap XML dinámico** (`/sitemap.xml`) con `SitemapController`
+- OK **robots.txt** configurado (`/robots.txt`) apuntando al sitemap
+
+#### Validaciones
+
+- OK Validación en [validator.schema.org](https://validator.schema.org): **0 errores, 0 advertencias** en todas las páginas
+- OK Sitemap generado con todas las URLs públicas (home, noticias, temas, agenda, perfil, contacto)
+- OK Sitemap respeta visibilidad de agenda (`agenda_link_visible`) y eventos (`is_public`)
+
+#### Archivos
+
+- OK `app/Http/Controllers/SitemapController.php` (nuevo)
+- OK `resources/views/sitemap.blade.php` (nuevo)
+- OK `resources/views/partials/seo-schema.blade.php` (nuevo)
+- OK `resources/views/layouts/app.blade.php` (mejorado con meta tags)
+- OK 8 vistas públicas actualizadas con `@section('meta_*')` y `@section('og_*')`
+- OK `routes/web.php` (ruta `/sitemap.xml`)
+- OK `public/robots.txt` (configurado)
+
+#### Pendiente
+
+- Pendiente: subir al VPS
+- Pendiente: verificar dominio en Google Search Console
+- Pendiente: enviar sitemap a Google Search Console
+
 ## Resumen de la Fase 1
 
 | Componente       | Cantidad |
@@ -299,3 +338,7 @@ Se actualiza al final de cada sesion de trabajo.
 | 24 sep 2026 | Usar `<button>` en lugar de `<a>` para el botón "Ver en mapa"              | HTML5 no permite anidar `<a>` dentro de `<a>`                     |
 | 24 sep 2026 | Habilitar Billing en Google Cloud                                          | Requisito de Google Maps API (aunque haya capa gratuita)          |
 | 24 sep 2026 | No versionar los assets generados del paquete (`public/js/cheesegrits/`)   | Se regeneran con `php artisan filament:assets` en cada deploy     |
+| 25 sep 2026 | SEO con meta tags `@yield`/`@section` (patrón manual)                      | Simple, sin paquetes, replicable                                  |
+| 25 sep 2026 | JSON-LD dinámico con `$extraSchema` inyectable por vista                   | Cada página tiene su propio schema                                |
+| 25 sep 2026 | Sitemap dinámico con `SitemapController`                                   | Siempre actualizado, sin cron                                     |
+| 25 sep 2026 | `robots.txt` en `public/` (archivo físico)                                 | Servidor web lo sirve directo                                     |
