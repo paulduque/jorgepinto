@@ -474,6 +474,20 @@ Cada vista puede **inyectar schemas adicionales** con `$extraSchema` antes del `
 @extends('layouts.app')
 ```
 
+### Google Search Console
+
+- **Propiedad:** `jorgepinto.ec` (verificada con método DNS)
+- **Sitemap enviado:** `sitemap.xml` (estado: Correcto)
+- **Última lectura de Google:** 25 sep 2026
+- **Monitoreo:** revisar en 24-72h el reporte de indexación
+
+### Pendientes SEO
+
+- [ ] Agregar meta tag de verificación secundario en Search Console
+- [ ] Registrar el sitio en Bing Webmaster Tools (opcional)
+- [ ] Monitorear en 1-2 semanas: `Páginas` indexadas, `Rendimiento`
+- [ ] Revisar en 1 mes: posicionamiento para "Jorge Pinto Pichincha"
+
 ---
 
 ## 📁 ESTRUCTURA DE ARCHIVOS

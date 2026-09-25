@@ -291,11 +291,21 @@ Se actualiza al final de cada sesion de trabajo.
 - OK `routes/web.php` (ruta `/sitemap.xml`)
 - OK `public/robots.txt` (configurado)
 
+#### Completado en producción
+
+- OK Subido al VPS (`git pull` + `optimize:clear`)
+- OK `/sitemap.xml` verificado en producción con URLs `https://jorgepinto.ec/...`
+- OK `/robots.txt` verificado en producción
+- OK JSON-LD verificado en producción (Person + WebSite con URLs reales)
+- OK Dominio `jorgepinto.ec` verificado en Google Search Console (método DNS)
+- OK Sitemap enviado a Google Search Console (`Estado: Correcto`, fecha de lectura 25 sep 2026)
+- OK Solicitud de indexación enviada para `/sitemap.xml` y URLs clave
+
 #### Pendiente
 
-- Pendiente: subir al VPS
-- Pendiente: verificar dominio en Google Search Console
-- Pendiente: enviar sitemap a Google Search Console
+- Pendiente (opcional): agregar meta tag de verificación secundario en Google Search Console
+- Pendiente (opcional): registrar el sitio en Bing Webmaster Tools
+- Pendiente (opcional): monitorear el reporte de indexación en 24-72 horas
 
 ## Resumen de la Fase 1
 
